@@ -67,6 +67,13 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current matmul = " << cur_start
+            << std::endl;
+
 #endif
 
   using namespace gemini;
@@ -130,6 +137,12 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   MatMulTimeInMilliSec += temp;
   std::cout << "Time in sec for current matmul = " << (temp / 1000.0)
             << std::endl;
+
+  // Add by Eloise
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current matmul = " << cur_end
+            << std::endl;
+
   uint64_t curComm;
   FIND_ALL_IO_TILL_NOW(curComm);
   MatMulCommSent += curComm;
@@ -218,6 +231,13 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current conv = " << cur_start
+            << std::endl;
+
 #endif
 
   if (zPadWLeft < zPadWRight) {
@@ -418,6 +438,13 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
     delete[] VoutputArr;
   }
 #endif  // VERIFY_LAYERWISE
+
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current conv = " << cur_end
+            << std::endl;
+#endif
 }
 
 void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
@@ -426,6 +453,13 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current BN = " << cur_start
+            << std::endl;
+
 #endif
   static int batchNormCtr = 1;
 
@@ -480,6 +514,12 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   BatchNormCommSent += curComm;
   std::cout << "Time in sec for current BN = [" << (temp / 1000.0) << "] sent ["
             << (curComm / 1024. / 1024.) << "] MB" << std::endl;
+
+  // Add by Eloise
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current BN = " << cur_end
+            << std::endl;
+
 #endif
 }
 

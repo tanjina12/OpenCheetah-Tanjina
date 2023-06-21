@@ -1959,6 +1959,14 @@ void Relu2(int64_t s1, int64_t s2, uint64_t *inArr, uint64_t *outArr,
 void Relu4(int64_t s1, int64_t s2, int64_t s3, int64_t s4, uint64_t *inArr,
            uint64_t *outArr, int64_t sf, uint64_t doTruncation) {
 
+// Add by Eloise
+// #ifdef LOG_LAYERWISE
+//   std::cout << "*******************" << std::endl;
+//   auto cur_start = CURRENT_TIME;
+//   std::cout << "Current time of start for current relu = " << cur_start
+//             << std::endl;
+// #endif
+
   int64_t size = (((s1 * s2) * s3) * s4);
 
   uint64_t *reshapedInArr = make_array<uint64_t>(size);
@@ -1993,6 +2001,14 @@ void Relu4(int64_t s1, int64_t s2, int64_t s3, int64_t s4, uint64_t *inArr,
   }
   ClearMemSecret1(size, reshapedInArr);
   ClearMemSecret1(size, reshapedOutArr);
+
+// Add by Eloise
+// #ifdef LOG_LAYERWISE
+//   auto cur_end = CURRENT_TIME;
+//   std::cout << "Current time of end for current relu = " << cur_end
+//             << std::endl;
+// #endif
+
 }
 
 void Relu5(int64_t s1, int64_t s2, int64_t s3, int64_t s4, int64_t s5,

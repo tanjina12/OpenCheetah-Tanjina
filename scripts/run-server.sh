@@ -10,7 +10,7 @@ else
 	exit 1
   fi
 
-  if ! contains "sqnet resnet50 densenet121" $2; then
+  if ! contains "sqnet resnet50 densenet121 short1 short2 relu1_28_28_1 relu784 relu12_23_34_45 relu422280 relu1 mp1 mp2 mp3 mp4" $2; then
     echo -e "Usage: run-server.sh [cheetah|SCI_HE] ${RED}[sqnet|resnet50|densenet121]${NC}"
 	exit 1
   fi

@@ -310,6 +310,13 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current conv = " << cur_start
+            << std::endl;
+
 #endif
 
   static int ctr = 1;
@@ -481,6 +488,14 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
     delete[] VoutputArr;
   }
 #endif
+
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current conv = " << cur_end
+            << std::endl;
+#endif
+
 }
 #endif
 
@@ -750,6 +765,13 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current relu = " << cur_start
+            << std::endl;
+
 #endif
 
   static int ctr = 1;
@@ -790,6 +812,12 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   uint64_t curComm;
   FIND_ALL_IO_TILL_NOW(curComm);
   ReluCommSent += curComm;
+
+  // Add by Eloise
+  // auto cur_end = CURRENT_TIME;
+  // std::cout << "Current time of end for current relu = " << cur_end
+  //           << std::endl;
+
 #endif
 
   if (doTruncation) {
@@ -907,6 +935,13 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   }
 #endif
 
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current relu = " << cur_end
+            << std::endl;
+#endif
+
   delete[] tempInp;
   delete[] tempOutp;
   delete[] msbShare;
@@ -920,6 +955,13 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current maxpool = " << cur_start
+            << std::endl;
+
 #endif
 
   static int ctr = 1;
@@ -1099,6 +1141,14 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
     delete[] VoutArr;
   }
 #endif
+
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current maxpool = " << cur_end
+            << std::endl;
+#endif
+
 }
 
 void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
@@ -1109,6 +1159,13 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current avgpool = " << cur_start
+            << std::endl;
+
 #endif
 
   static int ctr = 1;
@@ -1280,6 +1337,14 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
     delete[] VoutArr;
   }
 #endif
+
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current avgpool = " << cur_end
+            << std::endl;
+#endif
+
 }
 
 void ScaleDown(int32_t size, intType *inArr, int32_t sf) {

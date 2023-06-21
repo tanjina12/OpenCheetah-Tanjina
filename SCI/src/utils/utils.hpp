@@ -256,6 +256,10 @@ inline uint64_t all1Mask(int x){
 #define TIMER_TILL_NOW std::chrono::duration_cast<std::chrono::milliseconds>(\
     std::chrono::high_resolution_clock::now()-start_timer).count()
 
+// Add by Eloise
+// #define CURRENT_TIME std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+#define CURRENT_TIME std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
 #define INIT_IO_DATA_SENT uint64_t dataSentCtr__1 = io->counter;
 #define IO_TILL_NOW (io->counter - dataSentCtr__1);
 #define RESET_IO dataSentCtr__1 = io->counter;
