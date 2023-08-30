@@ -76,6 +76,12 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
 
 #endif
 
+  static int ctr = 1;
+  printf(
+      "Matmul #%d called d0=%ld, d1=%ld, d2=%ld, is_A_weight_matrix=%s\n",
+      ctr++, d0, d1, d2, is_A_weight_matrix ? "true" : "false");
+  ctr++;
+
   using namespace gemini;
   CheetahLinear::FCMeta meta;
 
@@ -276,14 +282,21 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   meta.stride = strideH;
   meta.is_shared_input = kIsSharedInput;
 
+  // printf(
+  //     "HomConv #%d called N=%ld, H=%ld, W=%ld, CI=%ld, FH=%ld, FW=%ld, "
+  //     "CO=%ld, S=%ld, Padding %s (%d %d %d %d)\n",
+  //     ctr++, N, meta.ishape.height(), meta.ishape.width(),
+  //     meta.ishape.channels(), meta.fshape.height(), meta.fshape.width(),
+  //     meta.n_filters, meta.stride,
+  //     (meta.padding == gemini::Padding::VALID ? "VALID" : "SAME"), zPadHLeft,
+  //     zPadHRight, zPadWLeft, zPadWRight);
+
   printf(
       "HomConv #%d called N=%ld, H=%ld, W=%ld, CI=%ld, FH=%ld, FW=%ld, "
-      "CO=%ld, S=%ld, Padding %s (%d %d %d %d)\n",
-      ctr++, N, meta.ishape.height(), meta.ishape.width(),
-      meta.ishape.channels(), meta.fshape.height(), meta.fshape.width(),
-      meta.n_filters, meta.stride,
-      (meta.padding == gemini::Padding::VALID ? "VALID" : "SAME"), zPadHLeft,
-      zPadHRight, zPadWLeft, zPadWRight);
+      "CO=%ld, zPadHLeft=%ld, zPadHRight=%ld, zPadWLeft=%ld, zPadWRight=%ld, "
+      "strideH=%ld, strideW=%ld\n",
+      ctr++, N, H, W, CI, FH, FW, CO, zPadHLeft, zPadHRight, zPadWLeft, zPadWRight,
+      strideH, strideW);
 
 #ifdef LOG_LAYERWISE
   const int64_t io_counter = cheetah_linear->io_counter();
@@ -457,7 +470,7 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   // Add by Eloise
   std::cout << "*******************" << std::endl;
   auto cur_start = CURRENT_TIME;
-  std::cout << "Current time of start for current BN = " << cur_start
+  std::cout << "Current time of start for current BN1 = " << cur_start
             << std::endl;
 
 #endif
@@ -468,7 +481,7 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   meta.is_shared_input = kIsSharedInput;
   meta.ishape = gemini::TensorShape({C, H, W});
 
-  std::cout << "HomBN #" << batchNormCtr << " on shape " << meta.ishape
+  std::cout << "HomBN1 #" << batchNormCtr << " on shape " << meta.ishape
             << std::endl;
   batchNormCtr++;
 
@@ -512,12 +525,12 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   uint64_t curComm;
   FIND_ALL_IO_TILL_NOW(curComm);
   BatchNormCommSent += curComm;
-  std::cout << "Time in sec for current BN = [" << (temp / 1000.0) << "] sent ["
+  std::cout << "Time in sec for current BN1 = [" << (temp / 1000.0) << "] sent ["
             << (curComm / 1024. / 1024.) << "] MB" << std::endl;
 
   // Add by Eloise
   auto cur_end = CURRENT_TIME;
-  std::cout << "Current time of end for current BN = " << cur_end
+  std::cout << "Current time of end for current BN1 = " << cur_end
             << std::endl;
 
 #endif
@@ -531,7 +544,12 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
 #endif
 
   static int batchNormCtr = 1;
-  printf("HomBN #%d via element-wise mult on %d points\n", batchNormCtr++,
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current BN2 = " << cur_start
+            << std::endl;
+  printf("HomBN2 #%d via element-wise mult on %d points\n", batchNormCtr++,
          size);
 
   gemini::CheetahLinear::BNMeta meta;
@@ -619,5 +637,13 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
     delete[] VoutputArr;
   }
 #endif
+
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current BN2 = " << cur_end
+            << std::endl;
+#endif
+
 }
 #endif

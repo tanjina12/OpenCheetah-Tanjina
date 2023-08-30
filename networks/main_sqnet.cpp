@@ -2275,6 +2275,16 @@ int main(int argc, char **argv) {
 
   assert(party == SERVER || party == CLIENT);
   std::cerr << "Loading input from stdin..." << std::endl;
+
+  // Add by Eloise
+#ifdef LOG_LAYERWISE
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start protocol = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+#endif
+
   uint64_t *tmp0 =
       make_array<uint64_t>((int32_t)1, (int32_t)227, (int32_t)227, (int32_t)3);
   /* Variable to read the clear value corresponding to the input variable tmp0
@@ -3097,7 +3107,22 @@ int main(int argc, char **argv) {
         (party == SERVER) ? __tmp_in_tmp52 : 0;
   }
   std::cerr << "input loaded, starting computation..." << std::endl;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of before StartComputation = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+
   StartComputation();
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of after StartComputation = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
 
   uint64_t *tmp53 =
       make_array<uint64_t>((int32_t)1, (int32_t)113, (int32_t)113, (int32_t)64);
@@ -3795,6 +3820,14 @@ int main(int argc, char **argv) {
   ArgMax3((int32_t)1, (int32_t)1, (int32_t)1, (int32_t)1, (int32_t)1,
           (int32_t)1, (int32_t)1000, tmp299, tmp301, tmp302);
   ClearMemPublic(tmp301);
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of end protocol = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+
   EndComputation();
 
   std::vector<double> prediction_vector(1000);

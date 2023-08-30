@@ -1812,6 +1812,16 @@ int main(int argc, char **argv) {
 
   assert(party == SERVER || party == CLIENT);
   std::cerr << "Loading input from stdin..." << std::endl;
+
+  // Add by Eloise
+#ifdef LOG_LAYERWISE
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start protocol = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+#endif
+
   uint64_t *tmp0 = make_array<uint64_t>(1, 224, 224, 3);
   /* Variable to read the clear value corresponding to the input variable tmp0
    * at (1930,1-1930,46) */
@@ -4967,7 +4977,24 @@ int main(int argc, char **argv) {
   }
   std::cerr << "input loaded, starting computation..." << std::endl;
   gINPUTCLOSE;
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of before StartComputation = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+
+
   StartComputation();
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of after StartComputation = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+
 
   int64_t *tmp252 = make_array<int64_t>(4, 2);
   Arr2DIdxRowM(tmp252, 4, 2, (int64_t)0, (int64_t)0) = 0;
@@ -6361,6 +6388,15 @@ int main(int argc, char **argv) {
   uint64_t *tmp780 = make_array<uint64_t>(1);
   ArgMax1(1, 1, 1001, tmp776, tmp779, tmp780);
   ClearMemPublic(tmp779);
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  cur_start = CURRENT_TIME;
+  std::cout << "Current time of end protocol = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+
+
   EndComputation();
 
   std::vector<double> prediction_vector(1001);

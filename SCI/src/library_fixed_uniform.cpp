@@ -703,7 +703,13 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
 #endif
 
   static int ctr = 1;
-  std::cout << "ArgMax " << ctr << " called, s1=" << s1 << ", s2=" << s2
+
+  // Add by Eloise
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start for current ArgMax = " << cur_start
+            << std::endl;
+  std::cout << "ArgMax #" << ctr << " called, s1=" << s1 << ", s2=" << s2
             << std::endl;
   ctr++;
 
@@ -759,6 +765,11 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
     delete[] VoutArr;
   }
 #endif
+
+// Add by Eloise
+auto cur_end = CURRENT_TIME;
+std::cout << "Current time of end for current ArgMax = " << cur_end
+          << std::endl;
 }
 
 void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncation) {
@@ -965,9 +976,13 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
 #endif
 
   static int ctr = 1;
-  std::cout << "Maxpool " << ctr << " called N=" << N << ", H=" << H
+  std::cout << "Maxpool #" << ctr << " called N=" << N << ", H=" << H
             << ", W=" << W << ", C=" << C << ", ksizeH=" << ksizeH
-            << ", ksizeW=" << ksizeW << std::endl;
+            << ", ksizeW=" << ksizeW << ", zPadHLeft=" << zPadHLeft << ", zPadHRight=" << zPadHRight 
+            << ", zPadWLeft=" << zPadWLeft << ", zPadWRight=" << zPadWRight 
+            << ", strideH=" << strideH << ", strideW=" << strideW 
+            << ", N1=" << N1 << ", imgH=" << imgH 
+            << ", imgW=" << imgW << ", C1=" << C1 << std::endl;
   ctr++;
 
   uint64_t moduloMask = sci::all1Mask(bitlength);
@@ -1169,9 +1184,13 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
 #endif
 
   static int ctr = 1;
-  std::cout << "AvgPool " << ctr << " called N=" << N << ", H=" << H
+  std::cout << "AvgPool #" << ctr << " called N=" << N << ", H=" << H
             << ", W=" << W << ", C=" << C << ", ksizeH=" << ksizeH
-            << ", ksizeW=" << ksizeW << std::endl;
+            << ", ksizeW=" << ksizeW << ", zPadHLeft=" << zPadHLeft << ", zPadHRight=" << zPadHRight 
+            << ", zPadWLeft=" << zPadWLeft << ", zPadWRight=" << zPadWRight 
+            << ", strideH=" << strideH << ", strideW=" << strideW 
+            << ", N1=" << N1 << ", imgH=" << imgH 
+            << ", imgW=" << imgW << ", C1=" << C1 << std::endl;
   ctr++;
 
   uint64_t moduloMask = sci::all1Mask(bitlength);

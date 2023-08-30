@@ -7643,7 +7643,14 @@ amap.parse(argc, argv);
 
 assert(party==SERVER || party==CLIENT);
 
-
+// Add by Eloise
+#ifdef LOG_LAYERWISE
+  std::cout << "*******************" << std::endl;
+  auto cur_start = CURRENT_TIME;
+  std::cout << "Current time of start protocol = " << cur_start
+            << std::endl;
+  std::cout << "*******************" << std::endl;
+#endif
 
 uint64_t* tmp0 = make_array<uint64_t>( (int32_t)1,  (int32_t)28,  (int32_t)28,  (int32_t)1);
 /* Variable to read the clear value corresponding to the input variable tmp0 at (9027,1-9027,44) */
@@ -7743,7 +7750,22 @@ cin >> __tmp_in_tmp6;
 Arr1DIdxRowM(tmp6, (int32_t)2,i0) = (party == SERVER) ? __tmp_in_tmp6 : 0;
 }
 std::cerr << "input loaded, starting computation..." << std::endl;
+
+// Add by Eloise
+std::cout << "*******************" << std::endl;
+cur_start = CURRENT_TIME;
+std::cout << "Current time of before StartComputation = " << cur_start
+          << std::endl;
+std::cout << "*******************" << std::endl;
+
 StartComputation();
+
+// Add by Eloise
+std::cout << "*******************" << std::endl;
+cur_start = CURRENT_TIME;
+std::cout << "Current time of after StartComputation = " << cur_start
+          << std::endl;
+std::cout << "*******************" << std::endl;
 
 uint64_t* tmp7 = make_array<uint64_t>( (int32_t)1,  (int32_t)24,  (int32_t)24,  (int32_t)25);
 
@@ -7850,6 +7872,14 @@ uint64_t* tmp38 = make_array<uint64_t>( (int32_t)1,  (int32_t)10);
 ScaleDown2( (int32_t)1,  (int32_t)10, tmp35,  (int32_t)12);
 CreateIdentity22( (int32_t)1,  (int32_t)10, tmp35, tmp38);
 ClearMemSecret2( (int32_t)1,  (int32_t)10, tmp35);
+
+// Add by Eloise
+std::cout << "*******************" << std::endl;
+cur_start = CURRENT_TIME;
+std::cout << "Current time of end protocol = " << cur_start
+          << std::endl;
+std::cout << "*******************" << std::endl;
+
 EndComputation();
 for (uint64_t i0 =  (uint64_t)0; i0 <  (int32_t)1; i0++){
 for (uint64_t i1 =  (uint64_t)0; i1 <  (int32_t)10; i1++){
