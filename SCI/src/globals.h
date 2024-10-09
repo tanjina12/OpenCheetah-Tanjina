@@ -146,6 +146,36 @@ extern uint64_t TanhCommSent;
 extern uint64_t SqrtCommSent;
 extern uint64_t NormaliseL2CommSent;
 extern uint64_t ArgMaxCommSent;
+
+/**
+ * Added by Tanjina - starts
+ */
+
+// for Power readings in microwatts
+extern uint64_t ConvTotalPowerConsumption;
+extern uint64_t ReluTotalPowerConsumption;
+extern uint64_t MaxPoolTotalPowerConsumption;
+extern uint64_t BatchNormTotalPowerConsumption;
+extern uint64_t MatMulTotalPowerConsumption;
+extern uint64_t AvgPoolTotalPowerConsumption;
+extern uint64_t ArgMaxTotalPowerConsumption;
+
+// for layer counter
+extern int Conv_layer_count;
+extern int Relu_layer_count;
+extern int MaxPool_layer_count;
+extern int BatchNorm_layer_count;
+extern int MatMul_layer_count;
+extern int AvgPool_layer_count;
+extern int ArgMax_layer_count;
+
+// Path to the power usage
+extern string power_usage_path; 
+
+/**
+ * Added by Tanjina - ends
+ */
+
 #endif
 
 #endif // GLOBALS_H__

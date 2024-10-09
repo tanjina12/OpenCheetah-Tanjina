@@ -307,6 +307,11 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    signedIntType zPadWRight, signedIntType strideH,
                    signedIntType strideW, intType *inputArr, intType *filterArr,
                    intType *outArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina                  
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -316,6 +321,47 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current conv = " << cur_start
             << std::endl;
+#endif
+
+/** 
+  * Code block for power measurement in Conv layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // conv layer counter
+  Conv_layer_count++;
+  //static int Conv_layer_count = 1;
+  static int layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+    file >> power_usage;   // Read the power usage value from the file
+    power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+    file.close();          // close it after reading
+  
+    // Add the current power reading into the sum
+    ConvTotalPowerConsumption += power_usage;
+  
+    std::cout << "Tanjina-Current Power usage for HomConv #" << Conv_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage   
+    }else{
+    // If it failed to open the file, dispaly and error message
+    std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }
 
 #endif
 
@@ -494,9 +540,24 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current conv = " << cur_end
             << std::endl;
+# endif
+  
+/** 
+ * Code block for power measurement in Conv layer ends
+ * Added by - Tanjina
+**/  
+#ifdef LOG_LAYERWISE
+
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i] << " microwatts" << std::endl; 
+  }
+  monitor_power = false;
+
 #endif
 
 }
+
 #endif
 
 #ifdef SCI_OT
@@ -697,24 +758,76 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
 #endif
 
 void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina  
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
-#endif
-
-  static int ctr = 1;
-
-  // Add by Eloise
+  // Add by Eloise >> Tanjina-Note: I moved them here. I could still found them in the log before when it was residing outside of this #ifdef LOG_LAYERWISE block, but to be consistent I placed them here!
   std::cout << "*******************" << std::endl;
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current ArgMax = " << cur_start
             << std::endl;
+#endif
+
+/** 
+  * Code block for power measurement in ArgMax layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // ArgMax layer counter
+  ArgMax_layer_count++;
+  //static int ArgMax_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+  /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   **/
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+    
+      // Add the current power reading into the sum
+      ArgMaxTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for ArgMax #" << ArgMax_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
+
+#endif
+
+  static int ctr = 1;
+
+  // Add by Eloise // Tanjina - Need to check if I found this in the log because it is outside the #ifdef LOG_LAYERWISE block! >> Tanjina-Note: Move it to #ifdef LOG_LAYERWISE block???
+  // std::cout << "*******************" << std::endl;
+  // auto cur_start = CURRENT_TIME;
+  // std::cout << "Current time of start for current ArgMax = " << cur_start
+  //           << std::endl;
   std::cout << "ArgMax #" << ctr << " called, s1=" << s1 << ", s2=" << s2
             << std::endl;
   ctr++;
 
   assert(s1 == 1 && "ArgMax impl right now assumes s1==1");
   argmax->ArgMaxMPC(s2, inArr, outArr);
+
 
 #ifdef LOG_LAYERWISE
   auto temp = TIMER_TILL_NOW;
@@ -766,13 +879,34 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
   }
 #endif
 
-// Add by Eloise
+// Add by Eloise >> Tanjina-Note: I moved them here. I could still found them in the log before when it was residing outside of this #ifdef LOG_LAYERWISE block, but to be consistent I placed them here!
+#ifdef LOG_LAYERWISE
 auto cur_end = CURRENT_TIME;
 std::cout << "Current time of end for current ArgMax = " << cur_end
           << std::endl;
+
+#endif
+
+/** 
+  * Code block for power measurement in ArgMax layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for ArgMax #" << ArgMax_layer_count << " : " << power_readings[i] << " microwatts" << std::endl; 
+  }
+  monitor_power = false;          
+
+#endif
 }
 
 void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncation) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -782,6 +916,48 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current relu = " << cur_start
             << std::endl;
+
+#endif
+
+/** 
+  * Code block for power measurement in Relu layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // Relu layer counter
+  Relu_layer_count++;
+  //static int Relu_layer_count = 1;
+  static int layer_count = 1;
+
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+     
+      // Add the current power reading into the sum
+      ReluTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for Relu #" << Relu_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage 
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
 
 #endif
 
@@ -951,6 +1127,19 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current relu = " << cur_end
             << std::endl;
+
+#endif
+/** 
+  * Code block for power measurement in Relu layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for Relu #" << Relu_layer_count << " : " << power_readings[i] << " microwatts" << std::endl; 
+  }
+  monitor_power = false;          
+
 #endif
 
   delete[] tempInp;
@@ -963,6 +1152,11 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
              int32_t zPadWLeft, int32_t zPadWRight, int32_t strideH,
              int32_t strideW, int32_t N1, int32_t imgH, int32_t imgW,
              int32_t C1, intType *inArr, intType *outArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -972,6 +1166,46 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current maxpool = " << cur_start
             << std::endl;
+
+#endif
+/** 
+  * Code block for power measurement in MaxPool layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // MaxPool layer counter
+  MaxPool_layer_count++;
+  //static int MaxPool_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+    
+      // Add the current power reading into the sum
+      MaxPoolTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for MaxPool #" << MaxPool_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
 
 #endif
 
@@ -1162,6 +1396,19 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current maxpool = " << cur_end
             << std::endl;
+
+#endif
+/** 
+   * Code block for power measurement in MaxPool layer ends
+   * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for MaxPool #" << MaxPool_layer_count << " : " << power_readings[i] << " microwatts" << std::endl; 
+  }
+  monitor_power = false;          
+
 #endif
 
 }
@@ -1171,6 +1418,11 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
              int32_t zPadWLeft, int32_t zPadWRight, int32_t strideH,
              int32_t strideW, int32_t N1, int32_t imgH, int32_t imgW,
              int32_t C1, intType *inArr, intType *outArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -1180,6 +1432,46 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current avgpool = " << cur_start
             << std::endl;
+
+#endif
+/** 
+  * Code block for power measurement in AvgPool layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // AvgPool layer counter
+  AvgPool_layer_count++;
+  //static int AvgPool_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+    
+      // Add the current power reading into the sum
+      AvgPoolTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for AvgPool #" << AvgPool_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage 
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
 
 #endif
 
@@ -1362,6 +1654,19 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current avgpool = " << cur_end
             << std::endl;
+
+#endif
+/** 
+   * Code block for power measurement in AvgPool layer ends
+   * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for AvgPool #" << AvgPool_layer_count << " : " << power_readings[i] << " microwatts" << std::endl;
+  }
+  monitor_power = false;          
+
 #endif
 
 }
@@ -1757,6 +2062,54 @@ void EndComputation() {
   std::cout << "NormaliseL2 data sent = "
             << ((NormaliseL2CommSent) / (1.0 * (1ULL << 20))) << " MiB."
             << std::endl;
+  std::cout << "------------------------------------------------------\n";
+  // Added by Tanjina - for power readings (total)
+  std::cout << "Total power consumption in Conv layer = " << (ConvTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in Relu layer = " << (ReluTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in MaxPool layer = " << (MaxPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in BatchNorm layer = " << (BatchNormTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in MatMul layer = " << (MatMulTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in AvgPool layer = " << (AvgPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Total power consumption in ArgMax layer = " << (ArgMaxTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "------------------------------------------------------\n";
+  // Added by Tanjina - for layer counts
+  std::cout << "Total number of Conv layer = " << Conv_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of Relu layer = " << Relu_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of MaxPool layer = " << MaxPool_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of BatchNorm layer = " << BatchNorm_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of MatMul layer = " << MatMul_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of AvgPool layer = " << AvgPool_layer_count
+            << " layers" << std::endl;
+  std::cout << "Total number of ArgMax layer = " << ArgMax_layer_count
+            << " layers" << std::endl;
+  std::cout << "------------------------------------------------------\n";
+    // Added by Tanjina - for power readings (average)
+  std::cout << "Average power consumption in Conv layer = " << ((ConvTotalPowerConsumption / 1000000.0) / Conv_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in Relu layer = " << ((ReluTotalPowerConsumption / 1000000.0) / Relu_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in MaxPool layer = " << ((MaxPoolTotalPowerConsumption / 1000000.0) / MaxPool_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in BatchNorm layer = " << ((BatchNormTotalPowerConsumption / 1000000.0) / BatchNorm_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in MatMul layer = " << ((MatMulTotalPowerConsumption / 1000000.0) / MatMul_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in AvgPool layer = " << ((AvgPoolTotalPowerConsumption / 1000000.0) / AvgPool_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
+  std::cout << "Average power consumption in ArgMax layer = " << ((ArgMaxTotalPowerConsumption / 1000000.0) / ArgMax_layer_count) // Convert from micro watts to watts
+            << " watts." << std::endl;
   std::cout << "------------------------------------------------------\n";
   if (party == SERVER) {
     uint64_t ConvCommSentClient = 0;

@@ -64,6 +64,11 @@ extern void ElemWiseActModelVectorMult_pt(uint64_t s1, uint64_1D &arr1,
 
 void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
               const intType *mat_B, intType *mat_C, bool is_A_weight_matrix) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -73,6 +78,46 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current matmul = " << cur_start
             << std::endl;
+
+#endif
+/** 
+  * Code block for power measurement in MatMul layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // matmul layer counter
+  MatMul_layer_count++;
+  //static int MatMul_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+    file >> power_usage;   // Read the power usage value from the file
+    power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+    file.close();          // close it after reading
+  
+    // Add the current power reading into the sum
+    MatMulTotalPowerConsumption += power_usage;
+ 
+    std::cout << "Tanjina-Current Power usage for MatMul #" << MatMul_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage
+    }else{
+    // If it failed to open the file, dispaly and error message
+    std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }
 
 #endif
 
@@ -152,6 +197,19 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   uint64_t curComm;
   FIND_ALL_IO_TILL_NOW(curComm);
   MatMulCommSent += curComm;
+#endif
+/** 
+  * Code block for power measurement in MatMul layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i] << " microwatts" << std::endl;
+  }
+  monitor_power = false;
+
 #endif
 
 #ifdef VERIFY_LAYERWISE
@@ -234,6 +292,13 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    signedIntType zPadWRight, signedIntType strideH,
                    signedIntType strideW, intType *inputArr, intType *filterArr,
                    intType *outArr) {
+
+
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -243,6 +308,46 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current conv = " << cur_start
             << std::endl;
+#endif
+
+/** 
+* Code block for power measurement in Conv layer starts
+* Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // conv layer counter
+  Conv_layer_count++;
+  //static int Conv_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+    file >> power_usage;   // Read the power usage value from the file
+    power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+    file.close();          // close it after reading
+  
+    // Add the current power reading into the sum
+    ConvTotalPowerConsumption += power_usage;
+  
+    std::cout << "Tanjina-Current Power usage for HomConv #" << Conv_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage
+    }else{
+    // If it failed to open the file, dispaly and error message
+    std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }
 
 #endif
 
@@ -458,11 +563,28 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   std::cout << "Current time of end for current conv = " << cur_end
             << std::endl;
 #endif
+/** 
+  * Code block for power measurement in Conv layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i] << " microwatts" << std::endl;
+  }
+  monitor_power = false;
+
+#endif
 }
 
 void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
                const intType *inputArr, const intType *scales,
                const intType *bias, intType *outArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -474,6 +596,46 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
             << std::endl;
 
 #endif
+/** 
+  * Code block for power measurement in BatchNorm layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  // BN layer counter
+  BatchNorm_layer_count++;
+  //static int BatchNorm_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+    
+      // Add the current power reading into the sum
+      BatchNormTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for BN1 #" << BatchNorm_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage 
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
+#endif
+
   static int batchNormCtr = 1;
 
   gemini::CheetahLinear::BNMeta meta;
@@ -534,21 +696,83 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
             << std::endl;
 
 #endif
+/** 
+  * Code block for power measurement in BatchNorm layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i] << " microwatts" << std::endl;
+  }
+  monitor_power = false;          
+
+#endif
 }
 
 void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
                                 intType *multArrVec, intType *outputArr) {
+/** Flag for the power readings
+  * true: start collecting the power usage
+  * false: stop collecting the power usage
+**/
+static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
-#endif
-
-  static int batchNormCtr = 1;
-  // Add by Eloise
+  // Add by Eloise >> Tanjina-Note: I moved them here. I could still found them in the log before when it was residing outside of this #ifdef LOG_LAYERWISE block, but to be consistent I placed them here!
   std::cout << "*******************" << std::endl;
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current BN2 = " << cur_start
-            << std::endl;
+            << std::endl; 
+#endif
+
+/** 
+  * Code block for power measurement in BatchNorm layer starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE 
+  // BN layer counter
+  BatchNorm_layer_count++;
+  //static int BatchNorm_layer_count = 1;
+  
+  // Variable to store the power usage value
+  int power_usage = 0;
+  // Initializing an array to store the power usage values
+  std::vector<int> power_readings;
+    /** Flag for the power readings
+   * true: start collecting the power usage
+   * false: stop collecting the power usage
+   * */
+  monitor_power = true;
+  //int result = system ();
+
+  if (monitor_power){
+    // open the file that resides in the power_usage_path, Unit: microWatt
+    std::ifstream file(power_usage_path);
+
+    if(file.is_open()){
+      file >> power_usage;   // Read the power usage value from the file
+      power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+      file.close();          // close it after reading
+    
+      // Add the current power reading into the sum
+      BatchNormTotalPowerConsumption += power_usage;
+    
+      std::cout << "Tanjina-Current Power usage for BN2 #" << BatchNorm_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage
+    }else{
+      // If it failed to open the file, dispaly and error message
+      std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    }
+  }            
+#endif
+
+  static int batchNormCtr = 1;
+  // Add by Eloise // Tanjina - Need to check if I found this in the log because it is outside the #ifdef LOG_LAYERWISE block! >> Tanjina-Note: Move it to #ifdef LOG_LAYERWISE block???
+  // std::cout << "*******************" << std::endl;
+  // auto cur_start = CURRENT_TIME;
+  // std::cout << "Current time of start for current BN2 = " << cur_start
+  //           << std::endl;
   printf("HomBN2 #%d via element-wise mult on %d points\n", batchNormCtr++,
          size);
 
@@ -643,7 +867,19 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current BN2 = " << cur_end
             << std::endl;
+
 #endif
+/** 
+  * Code block for power measurement in Batch Norm layer ends
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+  for(int i = 0; i < power_readings.size(); ++i){
+    // It's currently has 1 value!!!
+    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i] << " microwatts" << std::endl;
+  }
+  monitor_power = false;   
+#endif  
 
 }
 #endif

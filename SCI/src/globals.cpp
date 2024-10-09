@@ -113,4 +113,34 @@ uint64_t TanhCommSent = 0;
 uint64_t SqrtCommSent = 0;
 uint64_t NormaliseL2CommSent = 0;
 uint64_t ArgMaxCommSent = 0;
+
+/**
+ * Added by Tanjina - starts
+ */
+
+// for Power readings in microwatts
+uint64_t ConvTotalPowerConsumption = 0;
+uint64_t ReluTotalPowerConsumption = 0;
+uint64_t MaxPoolTotalPowerConsumption = 0;
+uint64_t BatchNormTotalPowerConsumption = 0;
+uint64_t MatMulTotalPowerConsumption = 0;
+uint64_t AvgPoolTotalPowerConsumption = 0;
+uint64_t ArgMaxTotalPowerConsumption = 0;
+
+// for layer counter
+int Conv_layer_count = 0;
+int Relu_layer_count = 0;
+int MaxPool_layer_count = 0;
+int BatchNorm_layer_count = 0;
+int MatMul_layer_count = 0;
+int AvgPool_layer_count = 0;
+int ArgMax_layer_count = 0;
+
+// Path to the power usage
+string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; 
+
+/**
+ * Added by Tanjina - ends
+ */
+
 #endif
