@@ -2096,20 +2096,20 @@ void EndComputation() {
             << " layers" << std::endl;
   std::cout << "------------------------------------------------------\n";
     // Added by Tanjina - for power readings (average)
-  std::cout << "Average power consumption in Conv layer = " << ((ConvTotalPowerConsumption / 1000000.0) / Conv_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in Relu layer = " << ((ReluTotalPowerConsumption / 1000000.0) / Relu_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in MaxPool layer = " << ((MaxPoolTotalPowerConsumption / 1000000.0) / MaxPool_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in BatchNorm layer = " << ((BatchNormTotalPowerConsumption / 1000000.0) / BatchNorm_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in MatMul layer = " << ((MatMulTotalPowerConsumption / 1000000.0) / MatMul_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in AvgPool layer = " << ((AvgPoolTotalPowerConsumption / 1000000.0) / AvgPool_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Average power consumption in ArgMax layer = " << ((ArgMaxTotalPowerConsumption / 1000000.0) / ArgMax_layer_count) // Convert from micro watts to watts
-            << " watts." << std::endl;
+  std::cout << "Average power consumption in Conv layer = " << computeAveragePower(ConvTotalPowerConsumption, Conv_layer_count, "Conv")
+              << " watts." << std::endl;  
+  std::cout << "Average power consumption in Relu layer = " << computeAveragePower(ReluTotalPowerConsumption, Relu_layer_count, "Relu")
+              << " watts." << std::endl;           
+  std::cout << "Average power consumption in MaxPool layer = " << computeAveragePower(MaxPoolTotalPowerConsumption, MaxPool_layer_count, "MaxPool")
+              << " watts." << std::endl; 
+  std::cout << "Average power consumption in BatchNorm layer = " << computeAveragePower(BatchNormTotalPowerConsumption, BatchNorm_layer_count, "BatchNorm")
+              << " watts." << std::endl; 
+  std::cout << "Average power consumption in MatMul layer = " << computeAveragePower(MatMulTotalPowerConsumption, MatMul_layer_count, "MatMul")
+              << " watts." << std::endl; 
+  std::cout << "Average power consumption in AvgPool layer = " << computeAveragePower(AvgPoolTotalPowerConsumption, AvgPool_layer_count, "AvgPool")
+              << " watts." << std::endl; 
+  std::cout << "Average power consumption in ArgMax layer = " << computeAveragePower(ArgMaxTotalPowerConsumption, ArgMax_layer_count, "ArgMax")
+              << " watts." << std::endl; 
   std::cout << "------------------------------------------------------\n";
   if (party == SERVER) {
     uint64_t ConvCommSentClient = 0;

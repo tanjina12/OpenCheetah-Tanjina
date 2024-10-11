@@ -139,6 +139,16 @@ int ArgMax_layer_count = 0;
 // Path to the power usage
 string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; 
 
+// Added by Tanjina
+double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName){
+  if(layerCount != 0){
+    return (static_cast<double>(totalPower) / 1000000.0) / layerCount; // Convert from micro watts to watts
+  }else{
+    std::cerr << "Error: " << layerName << " layer count is 0, can not divide by zero!" << std::endl;
+    return 0.0;
+  }
+}
+
 /**
  * Added by Tanjina - ends
  */

@@ -172,6 +172,9 @@ extern int ArgMax_layer_count;
 // Path to the power usage
 extern string power_usage_path; 
 
+// Added by Tanjina
+double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName);
+
 /**
  * Added by Tanjina - ends
  */
