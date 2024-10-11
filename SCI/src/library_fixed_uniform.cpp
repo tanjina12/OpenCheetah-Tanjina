@@ -26,6 +26,8 @@ SOFTWARE.
 #include "functionalities_uniform.h"
 #include "library_fixed_common.h"
 
+#include "energy_consumption.hpp"
+
 #define LOG_LAYERWISE
 #define VERIFY_LAYERWISE
 #undef VERIFY_LAYERWISE // undefine this to turn OFF the verifcation
@@ -311,7 +313,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   * true: start collecting the power usage
   * false: stop collecting the power usage
 **/
-static bool monitor_power = false; // Added by Tanjina                  
+// static bool monitor_power = false; // Added by Tanjina                  
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -336,32 +338,37 @@ static bool monitor_power = false; // Added by Tanjina
   // Variable to store the power usage value
   int power_usage = 0;
   // Initializing an array to store the power usage values
-  std::vector<int> power_readings;
+  // std::vector<int> power_readings;
     /** Flag for the power readings
    * true: start collecting the power usage
    * false: stop collecting the power usage
    * */
-  monitor_power = true;
+  // monitor_power = true;
   //int result = system ();
 
-  if (monitor_power){
-    // open the file that resides in the power_usage_path, Unit: microWatt
-    std::ifstream file(power_usage_path);
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  EnergyMeasurement measurement(power_usage_path);
 
-    if(file.is_open()){
-    file >> power_usage;   // Read the power usage value from the file
-    power_readings.push_back(power_usage); //append the power usage in the power_readings vector
-    file.close();          // close it after reading
+  // if (monitor_power){
+
+    // // open the file that resides in the power_usage_path, Unit: microWatt
+    // std::ifstream file(power_usage_path);
+
+    // if(file.is_open()){
+    // file >> power_usage;   // Read the power usage value from the file
+    // power_readings.push_back(power_usage); //append the power usage in the power_readings vector
+    // file.close();          // close it after reading
   
-    // Add the current power reading into the sum
-    ConvTotalPowerConsumption += power_usage;
+    // // Add the current power reading into the sum
+    // ConvTotalPowerConsumption += power_usage;
   
-    std::cout << "Tanjina-Current Power usage for HomConv #" << Conv_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage   
-    }else{
-    // If it failed to open the file, dispaly and error message
-    std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
-    }
-  }
+    // std::cout << "Tanjina-Current Power usage for HomConv #" << Conv_layer_count << " : " << power_usage << " microwatts" << std::endl;// Print the latest power usage   
+    // }else{
+    // // If it failed to open the file, dispaly and error message
+    // std::cerr << "Error: could not open file for power usage: " << power_usage_path << std::endl;
+    // }
+  //   measurement = new EnergyMeasurement(power_usage_path);
+  // }
 
 #endif
 
@@ -548,11 +555,13 @@ static bool monitor_power = false; // Added by Tanjina
 **/  
 #ifdef LOG_LAYERWISE
 
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i] << " microwatts" << std::endl; 
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts" << std::endl; 
   }
-  monitor_power = false;
+  // monitor_power = false;
 
 #endif
 
