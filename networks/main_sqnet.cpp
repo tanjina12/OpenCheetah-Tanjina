@@ -3124,6 +3124,8 @@ int main(int argc, char **argv) {
             << std::endl;
   std::cout << "*******************" << std::endl;
 
+    // Tanjina - note: starts power reading after computation starts??
+
   uint64_t *tmp53 =
       make_array<uint64_t>((int32_t)1, (int32_t)113, (int32_t)113, (int32_t)64);
 #if USE_CHEETAH

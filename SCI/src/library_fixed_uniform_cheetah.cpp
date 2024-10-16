@@ -69,7 +69,7 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   * true: start collecting the power usage
   * false: stop collecting the power usage
 **/
-static bool monitor_power = false; // Added by Tanjina
+// static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -212,9 +212,9 @@ static bool monitor_power = false; // Added by Tanjina
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
     MatMulTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i].first << " microwatts" << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
   }
-  monitor_power = false;
+  // monitor_power = false;
 
 #endif
 
@@ -581,7 +581,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
     ConvTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts" << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
   }
   // monitor_power = false;
 
@@ -595,7 +595,7 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   * true: start collecting the power usage
   * false: stop collecting the power usage
 **/
-static bool monitor_power = false; // Added by Tanjina
+// static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -720,7 +720,7 @@ std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
     BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts" << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
   }
   // monitor_power = false;          
 
@@ -733,7 +733,7 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   * true: start collecting the power usage
   * false: stop collecting the power usage
 **/
-static bool monitor_power = false; // Added by Tanjina
+// static bool monitor_power = false; // Added by Tanjina
 #ifdef LOG_LAYERWISE
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
@@ -899,9 +899,9 @@ static bool monitor_power = false; // Added by Tanjina
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
     BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts" << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
   }
-  monitor_power = false;   
+  // monitor_power = false;   
 #endif  
 
 }
