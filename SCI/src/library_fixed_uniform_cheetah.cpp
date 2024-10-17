@@ -79,7 +79,7 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current matmul = " << cur_start
             << std::endl;
-
+  MatMulStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in MatMul layer starts
@@ -101,6 +101,7 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -196,6 +197,7 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current matmul = " << cur_end
             << std::endl;
+  MatMulEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 
   uint64_t curComm;
   FIND_ALL_IO_TILL_NOW(curComm);
@@ -206,16 +208,14 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  MatMulExecutionTime = (MatMulEndTime - MatMulStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
     MatMulTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << MatMulExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;
-
 #endif
 
 #ifdef VERIFY_LAYERWISE
@@ -314,6 +314,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current conv = " << cur_start
             << std::endl;
+  ConvStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -336,6 +337,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -570,6 +572,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current conv = " << cur_end
             << std::endl;
+  ConvEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in Conv layer ends
@@ -577,14 +580,13 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
 **/
 #ifdef LOG_LAYERWISE
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
     ConvTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << ConvExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;
-
 #endif
 }
 
@@ -605,7 +607,7 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current BN1 = " << cur_start
             << std::endl;
-
+  BatchNormStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in BatchNorm layer starts
@@ -627,6 +629,7 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -707,23 +710,22 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current BN1 = " << cur_end
             << std::endl;
-
+  BatchNormEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in BatchNorm layer ends
   * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
-std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
     // It's currently has 1 value!!!
     BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << BatchNormExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;          
-
 #endif
 }
 
@@ -742,6 +744,7 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current BN2 = " << cur_start
             << std::endl; 
+  BatchNormStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -764,6 +767,7 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -886,20 +890,19 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current BN2 = " << cur_end
             << std::endl;
-
+  BatchNormEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in Batch Norm layer ends
   * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
     BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << BatchNormExecutionTime << " seconds"  << std::endl;
   }
   // monitor_power = false;   
 #endif  

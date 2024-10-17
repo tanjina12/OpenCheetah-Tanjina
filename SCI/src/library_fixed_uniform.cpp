@@ -323,6 +323,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current conv = " << cur_start
             << std::endl;
+  ConvStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -548,6 +549,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current conv = " << cur_end
             << std::endl;
+  ConvEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 # endif
   
 /** 
@@ -555,15 +557,14 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
  * Added by - Tanjina
 **/  
 #ifdef LOG_LAYERWISE
-
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
 
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl; 
+    ConvTotalPowerConsumption += power_readings[i].first;
+    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << ConvExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;
-
 #endif
 
 }
@@ -781,6 +782,7 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current ArgMax = " << cur_start
             << std::endl;
+  ArgMaxStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -803,6 +805,7 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -893,10 +896,10 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
 
 // Add by Eloise >> Tanjina-Note: I moved them here. I could still found them in the log before when it was residing outside of this #ifdef LOG_LAYERWISE block, but to be consistent I placed them here!
 #ifdef LOG_LAYERWISE
-auto cur_end = CURRENT_TIME;
-std::cout << "Current time of end for current ArgMax = " << cur_end
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end for current ArgMax = " << cur_end
           << std::endl;
-
+  ArgMaxEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -904,15 +907,14 @@ std::cout << "Current time of end for current ArgMax = " << cur_end
   * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
-std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  ArgMaxExecutionTime = (ArgMaxEndTime - ArgMaxStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for ArgMax #" << ArgMax_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl; 
+    ArgMaxTotalPowerConsumption += power_readings[i].first;
+    std::cout << "Tanjina-Power usage values from the power_reading for ArgMax #" << ArgMax_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << ArgMaxExecutionTime << " seconds" << std::endl; 
   }
   // monitor_power = false;          
-
 #endif
 }
 
@@ -931,7 +933,7 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current relu = " << cur_start
             << std::endl;
-
+  ReluStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
 /** 
@@ -955,6 +957,7 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -1144,22 +1147,21 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current relu = " << cur_end
             << std::endl;
-
+  ReluEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in Relu layer ends
   * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
-std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  ReluExecutionTime = (ReluEndTime - ReluStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
 
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for Relu #" << Relu_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl; 
+    ReluTotalPowerConsumption += power_readings[i].first;
+    std::cout << "Tanjina-Power usage values from the power_reading for Relu #" << Relu_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << ReluExecutionTime << " seconds" << std::endl; 
   }
   // monitor_power = false;          
-
 #endif
 
   delete[] tempInp;
@@ -1186,7 +1188,7 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current maxpool = " << cur_start
             << std::endl;
-
+  MaxPoolStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in MaxPool layer starts
@@ -1208,6 +1210,7 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -1418,22 +1421,21 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current maxpool = " << cur_end
             << std::endl;
-
+  MaxPoolEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
    * Code block for power measurement in MaxPool layer ends
    * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
-std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  MaxPoolExecutionTime = (MaxPoolEndTime - MaxPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for MaxPool #" << MaxPool_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl; 
+    MaxPoolTotalPowerConsumption += power_readings[i].first;
+    std::cout << "Tanjina-Power usage values from the power_reading for MaxPool #" << MaxPool_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << MaxPoolExecutionTime << " seconds" << std::endl; 
   }
   // monitor_power = false;          
-
 #endif
 
 }
@@ -1457,7 +1459,7 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start for current avgpool = " << cur_start
             << std::endl;
-
+  AvgPoolStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
   * Code block for power measurement in AvgPool layer starts
@@ -1479,6 +1481,7 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   // monitor_power = true;
   //int result = system ();
 
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
   // Pass the the Power usage file path to the Energy measurement library 
   EnergyMeasurement measurement(power_usage_path);
   // if (monitor_power){
@@ -1681,22 +1684,21 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   auto cur_end = CURRENT_TIME;
   std::cout << "Current time of end for current avgpool = " << cur_end
             << std::endl;
-
+  AvgPoolEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 #endif
 /** 
    * Code block for power measurement in AvgPool layer ends
    * Added by - Tanjina
 **/
 #ifdef LOG_LAYERWISE
-
-std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  AvgPoolExecutionTime = (AvgPoolEndTime - AvgPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+  
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    std::cout << "Tanjina-Power usage values from the power_reading for AvgPool #" << AvgPool_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << std::endl;
+    AvgPoolTotalPowerConsumption += power_readings[i].first;
+    std::cout << "Tanjina-Power usage values from the power_reading for AvgPool #" << AvgPool_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << AvgPoolExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;          
-
 #endif
 
 }

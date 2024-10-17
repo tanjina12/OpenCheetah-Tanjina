@@ -148,6 +148,34 @@ double computeAveragePower(uint64_t totalPower, int layerCount, const std::strin
     return 0.0;
   }
 }
+/* for execution time/duration */
+uint64_t ConvStartTime = 0;
+uint64_t ConvEndTime = 0;
+double ConvExecutionTime = 0.0;
+
+uint64_t ReluStartTime = 0;
+uint64_t ReluEndTime = 0;
+double ReluExecutionTime = 0.0;
+
+uint64_t MaxPoolStartTime = 0;
+uint64_t MaxPoolEndTime = 0;
+double MaxPoolExecutionTime = 0.0;
+
+uint64_t BatchNormStartTime = 0;
+uint64_t BatchNormEndTime = 0;
+double BatchNormExecutionTime = 0.0;
+
+uint64_t MatMulStartTime = 0;
+uint64_t MatMulEndTime = 0;
+double MatMulExecutionTime = 0.0;
+
+uint64_t AvgPoolStartTime = 0;
+uint64_t AvgPoolEndTime = 0;
+double AvgPoolExecutionTime = 0.0;
+
+uint64_t ArgMaxStartTime = 0;
+uint64_t ArgMaxEndTime = 0;
+double ArgMaxExecutionTime = 0.0;
 
 /**
  * Added by Tanjina - ends

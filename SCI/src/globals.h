@@ -175,6 +175,35 @@ extern string power_usage_path;
 // Added by Tanjina
 double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName);
 
+/* for execution time/duration */
+extern uint64_t ConvStartTime;
+extern uint64_t ConvEndTime;
+extern double ConvExecutionTime;
+
+extern uint64_t ReluStartTime;
+extern uint64_t ReluEndTime;
+extern double ReluExecutionTime;
+
+extern uint64_t MaxPoolStartTime;
+extern uint64_t MaxPoolEndTime;
+extern double MaxPoolExecutionTime;
+
+extern uint64_t BatchNormStartTime;
+extern uint64_t BatchNormEndTime;
+extern double BatchNormExecutionTime;
+
+extern uint64_t MatMulStartTime;
+extern uint64_t MatMulEndTime;
+extern double MatMulExecutionTime;
+
+extern uint64_t AvgPoolStartTime;
+extern uint64_t AvgPoolEndTime;
+extern double AvgPoolExecutionTime;
+
+extern uint64_t ArgMaxStartTime;
+extern uint64_t ArgMaxEndTime;
+extern double ArgMaxExecutionTime;
+
 /**
  * Added by Tanjina - ends
  */
