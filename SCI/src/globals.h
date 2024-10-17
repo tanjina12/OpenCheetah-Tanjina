@@ -204,6 +204,9 @@ extern uint64_t ArgMaxStartTime;
 extern uint64_t ArgMaxEndTime;
 extern double ArgMaxExecutionTime;
 
+// Added for Test, will delete
+double testForGit;
+
 /**
  * Added by Tanjina - ends
  */
