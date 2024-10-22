@@ -23,6 +23,8 @@ SOFTWARE.
 #ifndef GLOBALS_H___
 #define GLOBALS_H___
 
+#include "csv_writer.hpp"
+
 #include "NonLinear/argmax.h"
 #include "NonLinear/maxpool.h"
 #include "NonLinear/relu-interface.h"
@@ -203,6 +205,11 @@ extern double AvgPoolExecutionTime;
 extern uint64_t ArgMaxStartTime;
 extern uint64_t ArgMaxEndTime;
 extern double ArgMaxExecutionTime;
+
+extern std::string layerType;
+extern std::string ConvOutputFile;
+extern std::vector<std::string> ConvHeaders; 
+extern WriteToCSV writeConvCSV;
 
 /**
  * Added by Tanjina - ends

@@ -27,6 +27,7 @@ SOFTWARE.
 #include "library_fixed_common.h"
 
 #include "energy_consumption.hpp"
+#include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
 
 #define LOG_LAYERWISE
 #define VERIFY_LAYERWISE
@@ -559,11 +560,40 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
 #ifdef LOG_LAYERWISE
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
   ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-
+ 
   for(int i = 0; i < power_readings.size(); ++i){
+    uint64_t avgPower = power_readings[i].first;
+    int64_t timestampPower = power_readings[i].second;
+    double avgPowerUsage = avgPower / 1000000.0;
+
     ConvTotalPowerConsumption += power_readings[i].first;
     std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << ConvExecutionTime << " seconds" << std::endl;
-    std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
+    // std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
+    
+    //std::vector<csv_column_type> conv_data = {i, layerType, Conv_layer_count, timestampPower, avgPowerUsage, ConvExecutionTime, N, H, W, CI, FH, FW, CO, zPadHLeft, zPadHRight, zPadWLeft, zPadWRight, strideH, strideW};
+    //std::vector<csv_column_type> conv_data_row = {i, layerType, Conv_layer_count, timestampPower, avgPowerUsage, ConvExecutionTime, int64_t(N), int64_t(H), int64_t(W), int64_t(CI), int64_t(FH), int64_t(FW), int64_t(CO), int64_t(zPadHLeft), int64_t(zPadHRight), int64_t(zPadWLeft), int64_t(zPadWRight), int64_t(strideH), int64_t(strideW)};
+    std::vector<csv_column_type> conv_data;
+    conv_data.push_back(i);
+    conv_data.push_back(layerType);
+    conv_data.push_back(Conv_layer_count);
+    conv_data.push_back(timestampPower);
+    conv_data.push_back(avgPowerUsage);
+    conv_data.push_back(ConvExecutionTime);
+    conv_data.push_back(N);
+    conv_data.push_back(H);
+    conv_data.push_back(W);
+    conv_data.push_back(CI);
+    conv_data.push_back(FH);
+    conv_data.push_back(FW);
+    conv_data.push_back(CO);
+    conv_data.push_back(zPadHLeft);
+    conv_data.push_back(zPadHRight);
+    conv_data.push_back(zPadWLeft);
+    conv_data.push_back(zPadWRight);
+    conv_data.push_back(strideH);
+    conv_data.push_back(strideW);
+
+    writeConvCSV.insertDataRow(conv_data);
   }
   // monitor_power = false;
 #endif

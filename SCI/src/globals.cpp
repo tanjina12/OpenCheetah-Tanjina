@@ -20,6 +20,7 @@ SOFTWARE.
 */
 
 #include "globals.h"
+#include "csv_writer.hpp"
 
 sci::NetIO *io;
 sci::OTPack<sci::NetIO> *otpack;
@@ -176,6 +177,11 @@ double AvgPoolExecutionTime = 0.0;
 uint64_t ArgMaxStartTime = 0;
 uint64_t ArgMaxEndTime = 0;
 double ArgMaxExecutionTime = 0.0;
+
+std::string layerType = "Conv";
+std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";
+std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage", "execution time", "Conv_N", "Conv_H", "Conv_W", "Conv_CI", "Conv_FH", "Conv_FW", "Conv_CO", "Conv_ zPadHLeft", "Conv_zPadHRight", "Conv_zPadWLeft", "Conv_zPadWRight", "Conv_strideH", "Conv_strideW"};
+WriteToCSV writeConvCSV(ConvOutputFile, ConvHeaders);
 
 /**
  * Added by Tanjina - ends
