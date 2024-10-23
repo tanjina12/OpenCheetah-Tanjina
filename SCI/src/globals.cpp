@@ -178,10 +178,19 @@ uint64_t ArgMaxStartTime = 0;
 uint64_t ArgMaxEndTime = 0;
 double ArgMaxExecutionTime = 0.0;
 
-std::string layerType = "Conv";
+//std::string layerType = "Conv";
 std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";
-std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage", "execution time", "Conv_N", "Conv_H", "Conv_W", "Conv_CI", "Conv_FH", "Conv_FW", "Conv_CO", "Conv_ zPadHLeft", "Conv_zPadHRight", "Conv_zPadWLeft", "Conv_zPadWRight", "Conv_strideH", "Conv_strideW"};
+std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage", "execution time", "Conv_N", "Conv_H", "Conv_W", "Conv_CI", "Conv_FH", "Conv_FW", "Conv_CO", "Conv_ zPadHLeft", "Conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
 WriteToCSV writeConvCSV(ConvOutputFile, ConvHeaders);
+
+//std::string layerType = "Relu";
+std::string ReluOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/relu_output.csv";
+std::vector<std::string> ReluHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage", "execution time", "relu_coeff"};
+WriteToCSV writeReluCSV(ReluOutputFile, ReluHeaders);
+
+std::string MaxPoolOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/maxpool_output.csv";
+std::vector<std::string> MaxPoolHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage", "execution time", "maxpool_N", "maxpool_H", "maxpool_W", "maxpool_C", "maxpool_ksizeH", "maxpool_ksizeW", "maxpool_zPadHLeft", "maxpool_zPadHRight", "maxpool_zPadWLeft", "maxpool_zPadWRight", "maxpool_strideH", "maxpool_strideW", "maxpool_N1", "maxpool_imgH", "maxpool_imgW", "maxpool_C1"};
+WriteToCSV writeMaxPoolCSV(MaxPoolOutputFile, MaxPoolHeaders);
 
 /**
  * Added by Tanjina - ends

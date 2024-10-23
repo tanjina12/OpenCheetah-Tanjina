@@ -206,10 +206,18 @@ extern uint64_t ArgMaxStartTime;
 extern uint64_t ArgMaxEndTime;
 extern double ArgMaxExecutionTime;
 
-extern std::string layerType;
+//extern std::string layerType;
 extern std::string ConvOutputFile;
 extern std::vector<std::string> ConvHeaders; 
 extern WriteToCSV writeConvCSV;
+
+extern std::string ReluOutputFile;
+extern std::vector<std::string> ReluHeaders; 
+extern WriteToCSV writeReluCSV;
+
+extern std::string MaxPoolOutputFile;
+extern std::vector<std::string> MaxPoolHeaders; 
+extern WriteToCSV writeMaxPoolCSV;
 
 /**
  * Added by Tanjina - ends

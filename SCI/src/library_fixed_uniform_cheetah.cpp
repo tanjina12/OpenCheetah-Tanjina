@@ -213,8 +213,12 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   MatMulExecutionTime = (MatMulEndTime - MatMulStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
   
   for(int i = 0; i < power_readings.size(); ++i){
-    MatMulTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << MatMulExecutionTime << " seconds" << std::endl;
+    uint64_t avgPower = power_readings[i].first;
+    int64_t timestampPower = power_readings[i].second;
+    double avgPowerUsage = avgPower / 1000000.0;
+
+    MatMulTotalPowerConsumption += avgPower;
+    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << MatMulExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;
 #endif
@@ -596,7 +600,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
     //std::vector<csv_column_type> conv_data_row = {i, layerType, Conv_layer_count, timestampPower, avgPowerUsage, ConvExecutionTime, int64_t(N), int64_t(H), int64_t(W), int64_t(CI), int64_t(FH), int64_t(FW), int64_t(CO), int64_t(zPadHLeft), int64_t(zPadHRight), int64_t(zPadWLeft), int64_t(zPadWRight), int64_t(strideH), int64_t(strideW)};
     std::vector<csv_column_type> conv_data;
     conv_data.push_back(i);
-    conv_data.push_back(layerType);
+    conv_data.push_back("Conv");
     conv_data.push_back(Conv_layer_count);
     conv_data.push_back(timestampPower);
     conv_data.push_back(avgPowerUsage);
@@ -753,9 +757,12 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
   
   for(int i = 0; i < power_readings.size(); ++i){
-    // It's currently has 1 value!!!
-    BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << BatchNormExecutionTime << " seconds" << std::endl;
+    uint64_t avgPower = power_readings[i].first;
+    int64_t timestampPower = power_readings[i].second;
+    double avgPowerUsage = avgPower / 1000000.0;
+
+    BatchNormTotalPowerConsumption += avgPower;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds" << std::endl;
   }
   // monitor_power = false;          
 #endif
@@ -933,8 +940,12 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
   
   for(int i = 0; i < power_readings.size(); ++i){
-    BatchNormTotalPowerConsumption += power_readings[i].first;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << power_readings[i].first << " microwatts " << "Timestamp of the current power reading: " << power_readings[i].second << " Execution time: " << BatchNormExecutionTime << " seconds"  << std::endl;
+    uint64_t avgPower = power_readings[i].first;
+    int64_t timestampPower = power_readings[i].second;
+    double avgPowerUsage = avgPower / 1000000.0;
+
+    BatchNormTotalPowerConsumption += avgPower;
+    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds"  << std::endl;
   }
   // monitor_power = false;   
 #endif  
