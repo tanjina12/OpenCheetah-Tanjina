@@ -120,13 +120,13 @@ uint64_t ArgMaxCommSent = 0;
  */
 
 // for Power readings in microwatts
-uint64_t ConvTotalPowerConsumption = 0;
-uint64_t ReluTotalPowerConsumption = 0;
-uint64_t MaxPoolTotalPowerConsumption = 0;
-uint64_t BatchNormTotalPowerConsumption = 0;
-uint64_t MatMulTotalPowerConsumption = 0;
-uint64_t AvgPoolTotalPowerConsumption = 0;
-uint64_t ArgMaxTotalPowerConsumption = 0;
+// uint64_t ConvTotalPowerConsumption = 0;
+// uint64_t ReluTotalPowerConsumption = 0;
+// uint64_t MaxPoolTotalPowerConsumption = 0;
+// uint64_t BatchNormTotalPowerConsumption = 0;
+// uint64_t MatMulTotalPowerConsumption = 0;
+// uint64_t AvgPoolTotalPowerConsumption = 0;
+// uint64_t ArgMaxTotalPowerConsumption = 0;
 
 // for layer counter
 int Conv_layer_count = 0;
@@ -138,17 +138,17 @@ int AvgPool_layer_count = 0;
 int ArgMax_layer_count = 0;
 
 // Path to the power usage
-string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; 
+// string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; 
 
-// Added by Tanjina
-double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName){
-  if(layerCount != 0){
-    return (static_cast<double>(totalPower) / 1000000.0) / layerCount; // Convert from micro watts to watts
-  }else{
-    std::cerr << "Error: " << layerName << " layer count is 0, can not divide by zero!" << std::endl;
-    return 0.0;
-  }
-}
+// // Added by Tanjina
+// double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName){
+//   if(layerCount != 0){
+//     return (static_cast<double>(totalPower) / 1000000.0) / layerCount; // Convert from micro watts to watts
+//   }else{
+//     std::cerr << "Error: " << layerName << " layer count is 0, can not divide by zero!" << std::endl;
+//     return 0.0;
+//   }
+// }
 /* for execution time/duration */
 uint64_t ConvStartTime = 0;
 uint64_t ConvEndTime = 0;
@@ -180,7 +180,7 @@ double ArgMaxExecutionTime = 0.0;
 
 //std::string layerType = "Conv";
 std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";
-std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage_mcW", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
+std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
 WriteToCSV writeConvCSV(ConvOutputFile, ConvHeaders);
 
 //std::string layerType = "Relu";

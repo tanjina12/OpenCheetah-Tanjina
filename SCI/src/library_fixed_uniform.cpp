@@ -311,7 +311,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    signedIntType strideW, intType *inputArr, intType *filterArr,
                    intType *outArr) {                
 #ifdef LOG_LAYERWISE
-  sleep(1); // Added by Tanjina to adjust the first power reading timestamp
+  // sleep(1); // Added by Tanjina to adjust the first power reading timestamp
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
 
@@ -331,9 +331,9 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   // conv layer counter
   Conv_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);
 
 #endif
 
@@ -521,25 +521,25 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
  * Added by - Tanjina
 **/  
 #ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  // std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
   // ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
   ConvExecutionTime = (ConvEndTime - ConvStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
  
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first; // Note-Tanjina: Keep in microwatts, need to do the conversion later
-    int64_t timestampPower = power_readings[i].second;
-    // double avgPowerUsage = avgPower / 1000000.0;
+  // for(int i = 0; i < power_readings.size(); ++i){
+  //   uint64_t avgPower = power_readings[i].first; // Note-Tanjina: Keep in microwatts, need to do the conversion later
+  //   int64_t timestampPower = power_readings[i].second;
+  //   // double avgPowerUsage = avgPower / 1000000.0;
 
-    ConvTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << avgPower << " microwatts " << "Timestamp of the current power reading: " << timestampPower << " Conv layer start Timestamp: " << ConvStartTime << " Conv layer end Timestamp: " << ConvEndTime <<  " Execution time: " << ConvExecutionTime << " milliseconds" << std::endl;
-    // std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
+  //   ConvTotalPowerConsumption += avgPower;
+  //   std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << avgPower << " microwatts " << "Timestamp of the current power reading: " << timestampPower << " Conv layer start Timestamp: " << ConvStartTime << " Conv layer end Timestamp: " << ConvEndTime <<  " Execution time: " << ConvExecutionTime << " milliseconds" << std::endl;
+  //   // std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
     
     std::vector<csv_column_type> conv_data;
-    conv_data.push_back(i);
+    conv_data.push_back(0);
     conv_data.push_back("Conv");
     conv_data.push_back(Conv_layer_count);
-    conv_data.push_back(timestampPower);
-    conv_data.push_back(avgPower);
+    // conv_data.push_back(timestampPower);
+    // conv_data.push_back(avgPower);
     conv_data.push_back(ConvStartTime);
     conv_data.push_back(ConvEndTime);
     conv_data.push_back(ConvExecutionTime);
@@ -558,7 +558,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
     conv_data.push_back(strideW);
 
     writeConvCSV.insertDataRow(conv_data);
-  }
+  // }
   
 #endif
 
@@ -784,9 +784,9 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
   // ArgMax layer counter
   ArgMax_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);         
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);         
 
 #endif
 
@@ -867,21 +867,21 @@ void ArgMax(int32_t s1, int32_t s2, intType *inArr, intType *outArr) {
   * Code block for power measurement in ArgMax layer ends
   * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // ArgMaxExecutionTime = (ArgMaxEndTime - ArgMaxStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  ArgMaxExecutionTime = (ArgMaxEndTime - ArgMaxStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // ArgMaxExecutionTime = (ArgMaxEndTime - ArgMaxStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   ArgMaxExecutionTime = (ArgMaxEndTime - ArgMaxStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
   
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    ArgMaxTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for ArgMax #" << ArgMax_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << ArgMaxExecutionTime << " seconds" << std::endl; 
-  }
+//     ArgMaxTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for ArgMax #" << ArgMax_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << ArgMaxExecutionTime << " seconds" << std::endl; 
+//   }
         
-#endif
+// #endif
 }
 
 void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncation) {
@@ -906,9 +906,9 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   // Relu layer counter
   Relu_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);         
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);         
 
 #endif
 
@@ -1084,31 +1084,31 @@ void Relu(int32_t size, intType *inArr, intType *outArr, int sf, bool doTruncati
   * Code block for power measurement in Relu layer ends
   * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // ReluExecutionTime = (ReluEndTime - ReluStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  ReluExecutionTime = (ReluEndTime - ReluStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // ReluExecutionTime = (ReluEndTime - ReluStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   ReluExecutionTime = (ReluEndTime - ReluStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
 
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    ReluTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for Relu #" << Relu_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << ReluExecutionTime << " seconds" << " relu_coeff = " << size << std::endl; 
+//     ReluTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for Relu #" << Relu_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << ReluExecutionTime << " seconds" << " relu_coeff = " << size << std::endl; 
 
-    // std::vector<csv_column_type> relu_data;
-    // relu_data.push_back(i);
-    // relu_data.push_back("Relu");
-    // relu_data.push_back(Relu_layer_count);
-    // relu_data.push_back(timestampPower);
-    // relu_data.push_back(avgPowerUsage);
-    // relu_data.push_back(ReluExecutionTime);
-    // relu_data.push_back(size);
+//     // std::vector<csv_column_type> relu_data;
+//     // relu_data.push_back(i);
+//     // relu_data.push_back("Relu");
+//     // relu_data.push_back(Relu_layer_count);
+//     // relu_data.push_back(timestampPower);
+//     // relu_data.push_back(avgPowerUsage);
+//     // relu_data.push_back(ReluExecutionTime);
+//     // relu_data.push_back(size);
 
-    // writeReluCSV.insertDataRow(relu_data);
-  }       
-#endif
+//     // writeReluCSV.insertDataRow(relu_data);
+//   }       
+// #endif
 
   delete[] tempInp;
   delete[] tempOutp;
@@ -1139,9 +1139,9 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   // MaxPool layer counter
   MaxPool_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);       
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);       
 
 #endif
 
@@ -1338,47 +1338,47 @@ void MaxPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
    * Code block for power measurement in MaxPool layer ends
    * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // MaxPoolExecutionTime = (MaxPoolEndTime - MaxPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  MaxPoolExecutionTime = (MaxPoolEndTime - MaxPoolStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // MaxPoolExecutionTime = (MaxPoolEndTime - MaxPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   MaxPoolExecutionTime = (MaxPoolEndTime - MaxPoolStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
   
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    MaxPoolTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for MaxPool #" << MaxPool_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << MaxPoolExecutionTime << " seconds" << std::endl; 
-    // std::cout << "Tanjina-NN architecture info: " << "MaxPool_N = " << N << " MaxPool_H = " << H << " MaxPool_W = " << W << " MaxPool_C = " << C << " MaxPool_ksizeH = " << ksizeH << " MaxPool_ksizeW = " << ksizeW << " MaxPool_zPadHLeft = " << zPadHLeft << " MaxPool_zPadHRight = " << zPadHRight << " MaxPool_zPadWLeft = " << zPadWLeft  << " MaxPool_zPadWRight = " << zPadWRight << " MaxPool_strideH = " << strideH << " MaxPool_strideW = " << strideW << " MaxPool_N1 = " << N1 << " MaxPool_imgH = " << imgH << " MaxPool_imgW = " << imgW << " MaxPool_C1 = " << C1 << std::endl;
+//     MaxPoolTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for MaxPool #" << MaxPool_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << MaxPoolExecutionTime << " seconds" << std::endl; 
+//     // std::cout << "Tanjina-NN architecture info: " << "MaxPool_N = " << N << " MaxPool_H = " << H << " MaxPool_W = " << W << " MaxPool_C = " << C << " MaxPool_ksizeH = " << ksizeH << " MaxPool_ksizeW = " << ksizeW << " MaxPool_zPadHLeft = " << zPadHLeft << " MaxPool_zPadHRight = " << zPadHRight << " MaxPool_zPadWLeft = " << zPadWLeft  << " MaxPool_zPadWRight = " << zPadWRight << " MaxPool_strideH = " << strideH << " MaxPool_strideW = " << strideW << " MaxPool_N1 = " << N1 << " MaxPool_imgH = " << imgH << " MaxPool_imgW = " << imgW << " MaxPool_C1 = " << C1 << std::endl;
 
-    // std::vector<csv_column_type> maxpool_data;
-    // maxpool_data.push_back(i);
-    // maxpool_data.push_back("MaxPool");
-    // maxpool_data.push_back(MaxPool_layer_count);
-    // maxpool_data.push_back(timestampPower);
-    // maxpool_data.push_back(avgPowerUsage);
-    // maxpool_data.push_back(MaxPoolExecutionTime);
-    // maxpool_data.push_back(N);
-    // maxpool_data.push_back(H);
-    // maxpool_data.push_back(W);
-    // maxpool_data.push_back(C);
-    // maxpool_data.push_back(ksizeH);
-    // maxpool_data.push_back(ksizeW);
-    // maxpool_data.push_back(zPadHLeft);
-    // maxpool_data.push_back(zPadHRight);
-    // maxpool_data.push_back(zPadWLeft);
-    // maxpool_data.push_back(zPadWRight);
-    // maxpool_data.push_back(strideH);
-    // maxpool_data.push_back(strideW);
-    // maxpool_data.push_back(N1);
-    // maxpool_data.push_back(imgH);
-    // maxpool_data.push_back(imgW);
-    // maxpool_data.push_back(C1);
+//     // std::vector<csv_column_type> maxpool_data;
+//     // maxpool_data.push_back(i);
+//     // maxpool_data.push_back("MaxPool");
+//     // maxpool_data.push_back(MaxPool_layer_count);
+//     // maxpool_data.push_back(timestampPower);
+//     // maxpool_data.push_back(avgPowerUsage);
+//     // maxpool_data.push_back(MaxPoolExecutionTime);
+//     // maxpool_data.push_back(N);
+//     // maxpool_data.push_back(H);
+//     // maxpool_data.push_back(W);
+//     // maxpool_data.push_back(C);
+//     // maxpool_data.push_back(ksizeH);
+//     // maxpool_data.push_back(ksizeW);
+//     // maxpool_data.push_back(zPadHLeft);
+//     // maxpool_data.push_back(zPadHRight);
+//     // maxpool_data.push_back(zPadWLeft);
+//     // maxpool_data.push_back(zPadWRight);
+//     // maxpool_data.push_back(strideH);
+//     // maxpool_data.push_back(strideW);
+//     // maxpool_data.push_back(N1);
+//     // maxpool_data.push_back(imgH);
+//     // maxpool_data.push_back(imgW);
+//     // maxpool_data.push_back(C1);
 
-    // writeMaxPoolCSV.insertDataRow(maxpool_data);
-  }        
-#endif
+//     // writeMaxPoolCSV.insertDataRow(maxpool_data);
+//   }        
+// #endif
 
 }
 
@@ -1406,9 +1406,9 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
   // AvgPool layer counter
   AvgPool_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);          
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);          
 
 #endif
 
@@ -1597,20 +1597,20 @@ void AvgPool(int32_t N, int32_t H, int32_t W, int32_t C, int32_t ksizeH,
    * Code block for power measurement in AvgPool layer ends
    * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // AvgPoolExecutionTime = (AvgPoolEndTime - AvgPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  AvgPoolExecutionTime = (AvgPoolEndTime - AvgPoolStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // AvgPoolExecutionTime = (AvgPoolEndTime - AvgPoolStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   AvgPoolExecutionTime = (AvgPoolEndTime - AvgPoolStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
   
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    AvgPoolTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for AvgPool #" << AvgPool_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << AvgPoolExecutionTime << " seconds" << std::endl;
-  }       
-#endif
+//     AvgPoolTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for AvgPool #" << AvgPool_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << AvgPoolExecutionTime << " seconds" << std::endl;
+//   }       
+// #endif
 
 }
 
@@ -2007,21 +2007,21 @@ void EndComputation() {
             << std::endl;
   std::cout << "------------------------------------------------------\n";
   // Added by Tanjina - for power readings (total)
-  std::cout << "Total power consumption in Conv layer = " << (ConvTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in Relu layer = " << (ReluTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in MaxPool layer = " << (MaxPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in BatchNorm layer = " << (BatchNormTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in MatMul layer = " << (MatMulTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in AvgPool layer = " << (AvgPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "Total power consumption in ArgMax layer = " << (ArgMaxTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
-            << " watts." << std::endl;
-  std::cout << "------------------------------------------------------\n";
+  // std::cout << "Total power consumption in Conv layer = " << (ConvTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in Relu layer = " << (ReluTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in MaxPool layer = " << (MaxPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in BatchNorm layer = " << (BatchNormTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in MatMul layer = " << (MatMulTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in AvgPool layer = " << (AvgPoolTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "Total power consumption in ArgMax layer = " << (ArgMaxTotalPowerConsumption / 1000000.0) // Convert from micro watts to watts
+  //           << " watts." << std::endl;
+  // std::cout << "------------------------------------------------------\n";
   // Added by Tanjina - for layer counts
   std::cout << "Total number of Conv layer = " << Conv_layer_count
             << " layers" << std::endl;
