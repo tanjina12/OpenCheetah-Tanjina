@@ -311,7 +311,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    signedIntType strideW, intType *inputArr, intType *filterArr,
                    intType *outArr) {                
 #ifdef LOG_LAYERWISE
-  sleep(1); // Added by Tanjina to adjust the first power reading timestamp
+  // sleep(1); // Added by Tanjina to adjust the first power reading timestamp
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
 
@@ -513,7 +513,6 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   std::cout << "Current time of end for current conv = " << cur_end
             << std::endl;
   ConvEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
-  // sleep(1); // Added by Tanjina 
 # endif
   
 /** 
