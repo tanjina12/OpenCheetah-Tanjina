@@ -85,9 +85,9 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   // matmul layer counter
   MatMul_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);
 
 #endif
 
@@ -173,21 +173,21 @@ void MatMul2D(int32_t d0, int32_t d1, int32_t d2, const intType *mat_A,
   * Code block for power measurement in MatMul layer ends
   * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // MatMulExecutionTime = (MatMulEndTime - MatMulStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  MatMulExecutionTime = (MatMulEndTime - MatMulStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // MatMulExecutionTime = (MatMulEndTime - MatMulStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   MatMulExecutionTime = (MatMulEndTime - MatMulStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
   
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    MatMulTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << MatMulExecutionTime << " seconds" << std::endl;
-  }
+//     MatMulTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for MatMul #" << MatMul_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << MatMulExecutionTime << " seconds" << std::endl;
+//   }
 
-#endif
+// #endif
 
 #ifdef VERIFY_LAYERWISE
   int s1 = d0;
@@ -579,9 +579,9 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   // BN layer counter
   BatchNorm_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);
            
 #endif
 
@@ -649,36 +649,36 @@ void BatchNorm(int32_t B, int32_t H, int32_t W, int32_t C,
   * Code block for power measurement in BatchNorm layer ends
   * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later  
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later  
 
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    BatchNormTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds" << std::endl;
+//     BatchNormTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for BN1 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds" << std::endl;
 
-    // std::cout << "Tanjina-NN architecture info: " << "BN1_B = " << B << " BN1_C = " << C << " BN1_H = " << H << " BN1_W = " << W << std::endl;
+//     // std::cout << "Tanjina-NN architecture info: " << "BN1_B = " << B << " BN1_C = " << C << " BN1_H = " << H << " BN1_W = " << W << std::endl;
 
-    // std::vector<csv_column_type> batchnorm1_data;
-    // batchnorm1_data.push_back(i);
-    // batchnorm1_data.push_back("BatchNorm 1");
-    // batchnorm1_data.push_back(BatchNorm_layer_count);
-    // batchnorm1_data.push_back(timestampPower);
-    // batchnorm1_data.push_back(avgPowerUsage);
-    // batchnorm1_data.push_back(BatchNormExecutionTime);
-    // batchnorm1_data.push_back(C);
-    // batchnorm1_data.push_back(H);
-    // batchnorm1_data.push_back(W);
+//     // std::vector<csv_column_type> batchnorm1_data;
+//     // batchnorm1_data.push_back(i);
+//     // batchnorm1_data.push_back("BatchNorm 1");
+//     // batchnorm1_data.push_back(BatchNorm_layer_count);
+//     // batchnorm1_data.push_back(timestampPower);
+//     // batchnorm1_data.push_back(avgPowerUsage);
+//     // batchnorm1_data.push_back(BatchNormExecutionTime);
+//     // batchnorm1_data.push_back(C);
+//     // batchnorm1_data.push_back(H);
+//     // batchnorm1_data.push_back(W);
 
-    // writeBatchNorm1CSV.insertDataRow(batchnorm1_data);
+//     // writeBatchNorm1CSV.insertDataRow(batchnorm1_data);
   
-  }       
-#endif
+//   }       
+// #endif
 
 }
 
@@ -703,9 +703,9 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   // BN layer counter
   BatchNorm_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);
+  // std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // // Pass the the Power usage file path to the Energy measurement library 
+  // EnergyMeasurement measurement(power_usage_path);
          
 #endif
 
@@ -815,20 +815,20 @@ void ElemWiseActModelVectorMult(int32_t size, intType *inArr,
   * Code block for power measurement in Batch Norm 2 layer ends
   * Added by - Tanjina
 **/
-#ifdef LOG_LAYERWISE
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// #ifdef LOG_LAYERWISE
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   BatchNormExecutionTime = (BatchNormEndTime - BatchNormStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
   
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first;
-    int64_t timestampPower = power_readings[i].second;
-    double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first;
+//     int64_t timestampPower = power_readings[i].second;
+//     double avgPowerUsage = avgPower / 1000000.0;
 
-    BatchNormTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds"  << std::endl;
-  }
-#endif  
+//     BatchNormTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for BN2 #" << BatchNorm_layer_count << " : " << avgPowerUsage << " watts " << "Timestamp of the current power reading: " << timestampPower << " Execution time: " << BatchNormExecutionTime << " seconds"  << std::endl;
+//   }
+// #endif  
 
 }
 #endif
