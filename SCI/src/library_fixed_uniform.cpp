@@ -520,6 +520,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
  * Added by - Tanjina
 **/  
 #ifdef LOG_LAYERWISE
+  std::cout << "STOPPING ENERGY MEASUREMENT" << std::endl;
   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
   // ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
   ConvExecutionTime = (ConvEndTime - ConvStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
