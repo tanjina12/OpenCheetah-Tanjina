@@ -271,6 +271,7 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    intType *outArr) {
 #ifdef LOG_LAYERWISE
   // sleep(1); // Added by Tanjina to adjust the first power reading timestamp
+  std::this_thread::sleep_for(std::chrono::seconds(3)); // Added by Tanjina // Sleep for 3 seconds at the beginning of Conv layer before collecting power readings
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
   
@@ -552,7 +553,9 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
     conv_data.push_back(strideW);
 
     writeConvCSV.insertDataRow(conv_data);
-  }
+  } 
+  // Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Sleep for 3 seconds at the end of Conv layer after collecting power readings 
 #endif
 
 }

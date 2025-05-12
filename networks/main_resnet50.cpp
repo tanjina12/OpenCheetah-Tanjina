@@ -5015,6 +5015,7 @@ int main(int argc, char **argv) {
 #if USE_CHEETAH
   kIsSharedInput = false;
 #endif
+  // std::this_thread::sleep_for(std::chrono::seconds(1)); //  Added by Tanjina
   Conv2DWrapper(1, 230, 230, 3, 7, 7, 64, 0, 0, 0, 0, 2, 2, tmp253, tmp1,
                 tmp256);
   ClearMemSecret4(1, 230, 230, 3, tmp253);
