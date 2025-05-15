@@ -1773,9 +1773,11 @@ void FusedBN(int32_t N, int32_t H, int32_t W, int32_t CI, int32_t fh,
   } else {
     std::fill_n(scaled_filters, fh * fw * CI * CO, 0);
   }
-  std::cout << "Tanjina- Conv layer - 3 starts" << std::endl;
+  std::cout << "Tanjina- Conv layer (called from FusedBN) starts" << std::endl;
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(N, H, W, CI, fh, fw, CO, padHLeft, padHRight, padWLeft, padWRight, strideH, strideW, in_tensor, scaled_filters, out_tensor);
-  std::cout << "Tanjina- Conv layer - 3 ends" << std::endl;
+  std::cout << "Tanjina- Conv layer (called from FusedBN) ends" << std::endl;
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
 
   int32_t newH = (((H + (padHLeft + padHRight)) - fh) / strideH) + 1;
   int32_t newW = (((W + (padWLeft + padWRight)) - fw) / strideW) + 1;
@@ -5017,11 +5019,11 @@ int main(int argc, char **argv) {
   kIsSharedInput = false;
 #endif
   std::cout << "Tanjina- Conv layer - 1 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 230, 230, 3, 7, 7, 64, 0, 0, 0, 0, 2, 2, tmp253, tmp1,
                 tmp256);
   std::cout << "Tanjina- Conv layer - 1 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 230, 230, 3, tmp253);
   ClearMemSecret4(7, 7, 3, 64, tmp1);
 #if USE_CHEETAH
@@ -5046,11 +5048,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp267 = make_array<uint64_t>(1, 56, 56, 256);
   std::cout << "Tanjina- Conv layer - 2 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp265, tmp6,
                 tmp267);
   std::cout << "Tanjina- Conv layer - 2 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 64, 256, tmp6);
 
 #if USE_FUSED_BN
@@ -5062,11 +5064,7 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp9);
 #else
   uint64_t *tmp269 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 3 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 1, 1, 64, 0, 0, 0, 0, 1, 1, tmp265, tmp7, tmp269);
-  std::cout << "Tanjina- Conv layer - 3 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 56, 56, 64, tmp265);
   ClearMemSecret4(1, 1, 64, 64, tmp7);
 
@@ -5095,12 +5093,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp14);
 #else
   uint64_t *tmp278 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 4 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 3, 3, 64, 1, 1, 1, 1, 1, 1, tmp276, tmp12,
                 tmp278);
-  std::cout << "Tanjina- Conv layer - 4 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 56, 56, 64, tmp276);
   ClearMemSecret4(3, 3, 64, 64, tmp12);
 
@@ -5117,11 +5111,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp287 = make_array<uint64_t>(1, 56, 56, 256);
   std::cout << "Tanjina- Conv layer - 5 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina 
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina 
   Conv2DWrapper(1, 56, 56, 64, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp285, tmp17,
                 tmp287);
   std::cout << "Tanjina- Conv layer - 5 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
 
   uint64_t *tmp290 = make_array<uint64_t>(1, 56, 56, 256);
   MatAdd4(1, 56, 56, 256, tmp287, tmp267, tmp290);
@@ -5149,12 +5143,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp24);
 #else
   uint64_t *tmp298 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 6 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 256, 1, 1, 64, 0, 0, 0, 0, 1, 1, tmp296, tmp22,
                 tmp298);
-  std::cout << "Tanjina- Conv layer - 6 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 64, tmp22);
   ClearMemSecret4(1, 56, 56, 256, tmp296);
 
@@ -5180,12 +5170,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp29);
 #else
   uint64_t *tmp307 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 7 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 3, 3, 64, 1, 1, 1, 1, 1, 1, tmp305, tmp27,
                 tmp307);
-  std::cout << "Tanjina- Conv layer - 7 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 56, 56, 64, tmp305);
   ClearMemSecret4(3, 3, 64, 64, tmp27);
 
@@ -5203,11 +5189,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp316 = make_array<uint64_t>(1, 56, 56, 256);
   std::cout << "Tanjina- Conv layer - 8 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp314, tmp32,
                 tmp316);
   std::cout << "Tanjina- Conv layer - 8 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 56, 56, 64, tmp314);
   ClearMemSecret4(1, 1, 64, 256, tmp32);
 
@@ -5237,12 +5223,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp39);
 #else
   uint64_t *tmp327 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 9 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 256, 1, 1, 64, 0, 0, 0, 0, 1, 1, tmp325, tmp37,
                 tmp327);
-  std::cout << "Tanjina- Conv layer - 9 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 64, tmp37);
   ClearMemSecret4(1, 56, 56, 256, tmp325);
 
@@ -5268,12 +5250,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(64, tmp44);
 #else
   uint64_t *tmp336 = make_array<uint64_t>(1, 56, 56, 64);
-  std::cout << "Tanjina- Conv layer - 10 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 3, 3, 64, 1, 1, 1, 1, 1, 1, tmp334, tmp42,
                 tmp336);
-  std::cout << "Tanjina- Conv layer - 10 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 64, 64, tmp42);
   ClearMemSecret4(1, 56, 56, 64, tmp334);
 
@@ -5291,11 +5269,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp345 = make_array<uint64_t>(1, 56, 56, 256);
   std::cout << "Tanjina- Conv layer - 11 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 64, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp343, tmp47,
                 tmp345);
   std::cout << "Tanjina- Conv layer - 11 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 64, 256, tmp47);
   ClearMemSecret4(1, 56, 56, 64, tmp343);
 
@@ -5332,11 +5310,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp360 = make_array<uint64_t>(1, 28, 28, 512);
   std::cout << "Tanjina- Conv layer - 12 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 256, 1, 1, 512, 0, 0, 0, 0, 2, 2, tmp358, tmp52,
                 tmp360);
   std::cout << "Tanjina- Conv layer - 12 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 512, tmp52);
   ClearMemSecret4(1, 56, 56, 256, tmp358);
 
@@ -5350,12 +5328,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp54);
 #else
   uint64_t *tmp363 = make_array<uint64_t>(1, 56, 56, 128);
-  std::cout << "Tanjina- Conv layer - 13 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 56, 56, 256, 1, 1, 128, 0, 0, 0, 0, 1, 1, tmp355, tmp53,
                 tmp363);
-  std::cout << "Tanjina- Conv layer - 13 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 128, tmp53);
   ClearMemSecret4(1, 56, 56, 256, tmp355);
 
@@ -5396,12 +5370,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp60);
 #else
   uint64_t *tmp376 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 14 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 58, 58, 128, 3, 3, 128, 0, 0, 0, 0, 2, 2, tmp373, tmp58,
                 tmp376);
-  std::cout << "Tanjina- Conv layer - 14 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 128, 128, tmp58);
   ClearMemSecret4(1, 58, 58, 128, tmp373);
 
@@ -5419,11 +5389,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp385 = make_array<uint64_t>(1, 28, 28, 512);
   std::cout << "Tanjina- Conv layer - 15 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp383, tmp63,
                 tmp385);
   std::cout << "Tanjina- Conv layer - 15 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 128, 512, tmp63);
   ClearMemSecret4(1, 28, 28, 128, tmp383);
 
@@ -5453,12 +5423,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp70);
 #else
   uint64_t *tmp396 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 16 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 512, 1, 1, 128, 0, 0, 0, 0, 1, 1, tmp394, tmp68,
                 tmp396);
-  std::cout << "Tanjina- Conv layer - 16 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 28, 28, 512, tmp394);
   ClearMemSecret4(1, 1, 512, 128, tmp68);
 
@@ -5476,11 +5442,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp405 = make_array<uint64_t>(1, 28, 28, 128);
   std::cout << "Tanjina- Conv layer - 17 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 3, 3, 128, 1, 1, 1, 1, 1, 1, tmp403, tmp73,
                 tmp405);
   std::cout << "Tanjina- Conv layer - 17 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 128, 128, tmp73);
   ClearMemSecret4(1, 28, 28, 128, tmp403);
 
@@ -5497,11 +5463,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp414 = make_array<uint64_t>(1, 28, 28, 512);
   std::cout << "Tanjina- Conv layer - 18 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp412, tmp78,
                 tmp414);
   std::cout << "Tanjina- Conv layer - 18 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 128, 512, tmp78);
   ClearMemSecret4(1, 28, 28, 128, tmp412);
 
@@ -5531,12 +5497,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp85);
 #else
   uint64_t *tmp425 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 19 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 512, 1, 1, 128, 0, 0, 0, 0, 1, 1, tmp423, tmp83,
                 tmp425);
-  std::cout << "Tanjina- Conv layer - 19 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 512, 128, tmp83);
   ClearMemSecret4(1, 28, 28, 512, tmp423);
 
@@ -5562,12 +5524,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp90);
 #else
   uint64_t *tmp434 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 20 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 3, 3, 128, 1, 1, 1, 1, 1, 1, tmp432, tmp88,
                 tmp434);
-  std::cout << "Tanjina- Conv layer - 20 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 128, 128, tmp88);
   ClearMemSecret4(1, 28, 28, 128, tmp432);
 
@@ -5585,11 +5543,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp443 = make_array<uint64_t>(1, 28, 28, 512);
   std::cout << "Tanjina- Conv layer - 21 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp441, tmp93,
                 tmp443);
   std::cout << "Tanjina- Conv layer - 21 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 128, 512, tmp93);
   ClearMemSecret4(1, 28, 28, 128, tmp441);
 
@@ -5619,12 +5577,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp100);
 #else
   uint64_t *tmp454 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 22 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 512, 1, 1, 128, 0, 0, 0, 0, 1, 1, tmp452, tmp98,
                 tmp454);
-  std::cout << "Tanjina- Conv layer - 22 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 512, 128, tmp98);
   ClearMemSecret4(1, 28, 28, 512, tmp452);
 
@@ -5650,12 +5604,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(128, tmp105);
 #else
   uint64_t *tmp463 = make_array<uint64_t>(1, 28, 28, 128);
-  std::cout << "Tanjina- Conv layer - 23 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 3, 3, 128, 1, 1, 1, 1, 1, 1, tmp461, tmp103,
                 tmp463);
-  std::cout << "Tanjina- Conv layer - 23 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 28, 28, 128, tmp461);
   ClearMemSecret4(3, 3, 128, 128, tmp103);
 
@@ -5673,11 +5623,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp472 = make_array<uint64_t>(1, 28, 28, 512);
   std::cout << "Tanjina- Conv layer - 24 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 128, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp470, tmp108,
                 tmp472);
   std::cout << "Tanjina- Conv layer - 24 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 128, 512, tmp108);
   ClearMemSecret4(1, 28, 28, 128, tmp470);
 
@@ -5714,11 +5664,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp487 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 25 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina  
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina  
   Conv2DWrapper(1, 28, 28, 512, 1, 1, 1024, 0, 0, 0, 0, 2, 2, tmp485, tmp113,
                 tmp487);
   std::cout << "Tanjina- Conv layer - 25 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 512, 1024, tmp113);
   ClearMemSecret4(1, 28, 28, 512, tmp485);
 
@@ -5732,12 +5682,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp116);
 #else
   uint64_t *tmp490 = make_array<uint64_t>(1, 28, 28, 256);
-  std::cout << "Tanjina- Conv layer - 26 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 28, 28, 512, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp482, tmp114,
                 tmp490);
-  std::cout << "Tanjina- Conv layer - 26 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 512, 256, tmp114);
   ClearMemSecret4(1, 28, 28, 512, tmp482);
 
@@ -5778,12 +5724,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp121);
 #else
   uint64_t *tmp503 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 27 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 30, 30, 256, 3, 3, 256, 0, 0, 0, 0, 2, 2, tmp500, tmp119,
                 tmp503);
-  std::cout << "Tanjina- Conv layer - 27 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 256, 256, tmp119);
   ClearMemSecret4(1, 30, 30, 256, tmp500);
 
@@ -5801,11 +5743,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp512 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 28 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp510, tmp124,
                 tmp512);
   std::cout << "Tanjina- Conv layer - 28 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 1024, tmp124);
   ClearMemSecret4(1, 14, 14, 256, tmp510);
 
@@ -5835,12 +5777,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp131);
 #else
   uint64_t *tmp523 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 29 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp521, tmp129,
                 tmp523);
-  std::cout << "Tanjina- Conv layer - 29 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 1024, 256, tmp129);
   ClearMemSecret4(1, 14, 14, 1024, tmp521);
 
@@ -5866,12 +5804,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp136);
 #else
   uint64_t *tmp532 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 30 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 3, 3, 256, 1, 1, 1, 1, 1, 1, tmp530, tmp134,
                 tmp532);
-  std::cout << "Tanjina- Conv layer - 30 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 256, 256, tmp134);
   ClearMemSecret4(1, 14, 14, 256, tmp530);
 
@@ -5889,11 +5823,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp541 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 31 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina 
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina 
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp539, tmp139,
                 tmp541);
   std::cout << "Tanjina- Conv layer - 31 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 1024, tmp139);
   ClearMemSecret4(1, 14, 14, 256, tmp539);
 
@@ -5924,12 +5858,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp146);
 #else
   uint64_t *tmp552 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 32 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp550, tmp144,
                 tmp552);
-  std::cout << "Tanjina- Conv layer - 32 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 1024, 256, tmp144);
   ClearMemSecret4(1, 14, 14, 1024, tmp550);
 
@@ -5955,12 +5885,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp151);
 #else
   uint64_t *tmp561 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 33 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 3, 3, 256, 1, 1, 1, 1, 1, 1, tmp559, tmp149,
                 tmp561);
-  std::cout << "Tanjina- Conv layer - 33 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 256, 256, tmp149);
   ClearMemSecret4(1, 14, 14, 256, tmp559);
 
@@ -5978,11 +5904,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp570 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 34 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp568, tmp154,
                 tmp570);
   std::cout << "Tanjina- Conv layer - 34 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 1024, tmp154);
   ClearMemSecret4(1, 14, 14, 256, tmp568);
 
@@ -6013,12 +5939,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp161);
 #else
   uint64_t *tmp581 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 35 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp579, tmp159,
                 tmp581);
-  std::cout << "Tanjina- Conv layer - 35 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 1024, 256, tmp159);
   ClearMemSecret4(1, 14, 14, 1024, tmp579);
 
@@ -6044,12 +5966,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp166);
 #else
   uint64_t *tmp590 = make_array<uint64_t>(1, 14, 14, 256);\
-  std::cout << "Tanjina- Conv layer - 36 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 3, 3, 256, 1, 1, 1, 1, 1, 1, tmp588, tmp164,
                 tmp590);
-  std::cout << "Tanjina- Conv layer - 36 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 256, 256, tmp164);
   ClearMemSecret4(1, 14, 14, 256, tmp588);
 
@@ -6067,11 +5985,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp599 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 37 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp597, tmp169,
                 tmp599);
   std::cout << "Tanjina- Conv layer - 37 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 256, 1024, tmp169);
   ClearMemSecret4(1, 14, 14, 256, tmp597);
 
@@ -6102,12 +6020,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp176);
 #else
   uint64_t *tmp610 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 38 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp608, tmp174,
                 tmp610);
-  std::cout << "Tanjina- Conv layer - 38 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 1024, tmp608);
   ClearMemSecret4(1, 1, 1024, 256, tmp174);
 
@@ -6133,12 +6047,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp181);
 #else
   uint64_t *tmp619 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 39 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 3, 3, 256, 1, 1, 1, 1, 1, 1, tmp617, tmp179,
                 tmp619);
-  std::cout << "Tanjina- Conv layer - 39 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 256, 256, tmp179);
   ClearMemSecret4(1, 14, 14, 256, tmp617);
 
@@ -6156,11 +6066,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp628 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 40 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp626, tmp184,
                 tmp628);
   std::cout << "Tanjina- Conv layer - 40 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 256, tmp626);
   ClearMemSecret4(1, 1, 256, 1024, tmp184);
 
@@ -6191,12 +6101,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp191);
 #else
   uint64_t *tmp639 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 41 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 256, 0, 0, 0, 0, 1, 1, tmp637, tmp189,
                 tmp639);
-  std::cout << "Tanjina- Conv layer - 41 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 1024, 256, tmp189);
   ClearMemSecret4(1, 14, 14, 1024, tmp637);
 
@@ -6222,12 +6128,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(256, tmp195);
 #else
   uint64_t *tmp648 = make_array<uint64_t>(1, 14, 14, 256);
-  std::cout << "Tanjina- Conv layer - 42 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 3, 3, 256, 1, 1, 1, 1, 1, 1, tmp646, tmp194,
                 tmp648);
-  std::cout << "Tanjina- Conv layer - 42 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 256, tmp646);
   ClearMemSecret4(3, 3, 256, 256, tmp194);
 
@@ -6245,11 +6147,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp657 = make_array<uint64_t>(1, 14, 14, 1024);
   std::cout << "Tanjina- Conv layer - 43 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 256, 1, 1, 1024, 0, 0, 0, 0, 1, 1, tmp655, tmp199,
                 tmp657);
   std::cout << "Tanjina- Conv layer - 43 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 256, tmp655);
   ClearMemSecret4(1, 1, 256, 1024, tmp199);
 
@@ -6287,11 +6189,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp672 = make_array<uint64_t>(1, 7, 7, 2048);
   std::cout << "Tanjina- Conv layer - 44 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 2048, 0, 0, 0, 0, 2, 2, tmp670, tmp204,
                 tmp672);
   std::cout << "Tanjina- Conv layer - 44 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 1024, tmp670);
   ClearMemSecret4(1, 1, 1024, 2048, tmp204);
 
@@ -6305,12 +6207,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp207);
 #else
   uint64_t *tmp675 = make_array<uint64_t>(1, 14, 14, 512);
-  std::cout << "Tanjina- Conv layer - 45 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 14, 14, 1024, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp667, tmp205,
                 tmp675);
-  std::cout << "Tanjina- Conv layer - 45 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 14, 14, 1024, tmp667);
   ClearMemSecret4(1, 1, 1024, 512, tmp205);
 
@@ -6351,12 +6249,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp212);
 #else
   uint64_t *tmp688 = make_array<uint64_t>(1, 7, 7, 512);
-  std::cout << "Tanjina- Conv layer - 46 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 16, 16, 512, 3, 3, 512, 0, 0, 0, 0, 2, 2, tmp685, tmp210,
                 tmp688);
-  std::cout << "Tanjina- Conv layer - 46 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 512, 512, tmp210);
   ClearMemSecret4(1, 16, 16, 512, tmp685);
 
@@ -6374,11 +6268,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp697 = make_array<uint64_t>(1, 7, 7, 2048);
   std::cout << "Tanjina- Conv layer - 47 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 512, 1, 1, 2048, 0, 0, 0, 0, 1, 1, tmp695, tmp215,
                 tmp697);
   std::cout << "Tanjina- Conv layer - 47 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 512, 2048, tmp215);
   ClearMemSecret4(1, 7, 7, 512, tmp695);
 
@@ -6407,12 +6301,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp221);
 #else
   uint64_t *tmp708 = make_array<uint64_t>(1, 7, 7, 512);
-  std::cout << "Tanjina- Conv layer - 48 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 2048, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp706, tmp220,
                 tmp708);
-  std::cout << "Tanjina- Conv layer - 48 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 1, 2048, 512, tmp220);
   ClearMemSecret4(1, 7, 7, 2048, tmp706);
 
@@ -6438,12 +6328,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp227);
 #else
   uint64_t *tmp717 = make_array<uint64_t>(1, 7, 7, 512);
-  std::cout << "Tanjina- Conv layer - 49 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 512, 3, 3, 512, 1, 1, 1, 1, 1, 1, tmp715, tmp225,
                 tmp717);
-  std::cout << "Tanjina- Conv layer - 49 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 7, 7, 512, tmp715);
   ClearMemSecret4(3, 3, 512, 512, tmp225);
 
@@ -6461,11 +6347,11 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp726 = make_array<uint64_t>(1, 7, 7, 2048);
   std::cout << "Tanjina- Conv layer - 50 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 512, 1, 1, 2048, 0, 0, 0, 0, 1, 1, tmp724, tmp230,
                 tmp726);
   std::cout << "Tanjina- Conv layer - 50 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 7, 7, 512, tmp724);
   ClearMemSecret4(1, 1, 512, 2048, tmp230);
 
@@ -6495,12 +6381,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp237);
 #else
   uint64_t *tmp737 = make_array<uint64_t>(1, 7, 7, 512);
-  std::cout << "Tanjina- Conv layer - 51 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 2048, 1, 1, 512, 0, 0, 0, 0, 1, 1, tmp735, tmp235,
                 tmp737);
-  std::cout << "Tanjina- Conv layer - 51 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(1, 7, 7, 2048, tmp735);
   ClearMemSecret4(1, 1, 2048, 512, tmp235);
 
@@ -6526,12 +6408,8 @@ int main(int argc, char **argv) {
   ClearMemSecret1(512, tmp242);
 #else
   uint64_t *tmp746 = make_array<uint64_t>(1, 7, 7, 512);
-  std::cout << "Tanjina- Conv layer - 52 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 512, 3, 3, 512, 1, 1, 1, 1, 1, 1, tmp744, tmp240,
                 tmp746);
-  std::cout << "Tanjina- Conv layer - 52 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
   ClearMemSecret4(3, 3, 512, 512, tmp240);
   ClearMemSecret4(1, 7, 7, 512, tmp744);
 
@@ -6549,10 +6427,10 @@ int main(int argc, char **argv) {
 
   uint64_t *tmp755 = make_array<uint64_t>(1, 7, 7, 2048);
   std::cout << "Tanjina- Conv layer - 53 starts" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   Conv2DWrapper(1, 7, 7, 512, 1, 1, 2048, 0, 0, 0, 0, 1, 1, tmp753, tmp245, tmp755);
   std::cout << "Tanjina- Conv layer - 53 ends" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(2)); //  Added by Tanjina
+  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Added by Tanjina
   ClearMemSecret4(1, 7, 7, 512, tmp753);
   ClearMemSecret4(1, 1, 512, 2048, tmp245);
 
