@@ -1773,8 +1773,9 @@ void FusedBN(int32_t N, int32_t H, int32_t W, int32_t CI, int32_t fh,
   } else {
     std::fill_n(scaled_filters, fh * fw * CI * CO, 0);
   }
-
+  std::cout << "Tanjina- Conv layer - 3 starts" << std::endl;
   Conv2DWrapper(N, H, W, CI, fh, fw, CO, padHLeft, padHRight, padWLeft, padWRight, strideH, strideW, in_tensor, scaled_filters, out_tensor);
+  std::cout << "Tanjina- Conv layer - 3 ends" << std::endl;
 
   int32_t newH = (((H + (padHLeft + padHRight)) - fh) / strideH) + 1;
   int32_t newW = (((W + (padWLeft + padWRight)) - fw) / strideW) + 1;
