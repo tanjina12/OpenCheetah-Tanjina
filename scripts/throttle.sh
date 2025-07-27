@@ -18,7 +18,9 @@ sudo tc qdisc del dev $DEV root
 ## about 3Gbps
 #sudo tc qdisc add dev $DEV root handle 1: tbf rate 3000mbit burst 100000 limit 10000
 # sudo tc qdisc add dev $DEV root handle 1: tbf rate 500mbit burst 100000 limit 10000 # Tanjina-note: about 500Mbps
-sudo tc qdisc add dev $DEV root handle 1: tbf rate 100mbit burst 100000 limit 10000 # Tanjina-note: about 100Mbps
+# sudo tc qdisc add dev $DEV root handle 1: tbf rate 100mbit burst 100000 limit 10000 # Tanjina-note: about 100Mbps
+# sudo tc qdisc add dev $DEV root handle 1: tbf rate 200mbit burst 100000 limit 10000 # Tanjina-note: about 200Mbps
+sudo tc qdisc add dev $DEV root handle 1: tbf rate 50mbit burst 100000 limit 10000 # Tanjina-note: about 50Mbps
 ## about 0.3ms ping latency
 sudo tc qdisc add dev $DEV parent 1:1 handle 10: netem delay 0.15msec
 fi
