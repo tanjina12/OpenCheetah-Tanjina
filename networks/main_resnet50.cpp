@@ -6415,7 +6415,7 @@ int main(int argc, char **argv) {
   ProtocolEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
   std::cout << "*******************" << std::endl;
 
-  /** 
+/** 
  * Code block for power measurement when Protocol ends
  * Added by - Tanjina
 **/  
