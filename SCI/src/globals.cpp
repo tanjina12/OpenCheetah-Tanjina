@@ -150,6 +150,14 @@ double computeAveragePower(uint64_t totalPower, int layerCount, const std::strin
   }
 }
 /* for execution time/duration */
+uint64_t ProtocolStartTime = 0;
+uint64_t ProtocolEndTime = 0;
+uint64_t ProtocolExecutionTime = 0;
+
+uint64_t ComputationStartTime = 0;
+uint64_t ComputationEndTime = 0;
+uint64_t ComputationExecutionTime = 0;
+
 uint64_t ConvStartTime = 0;
 uint64_t ConvEndTime = 0;
 uint64_t ConvExecutionTime = 0;
@@ -177,6 +185,10 @@ double AvgPoolExecutionTime = 0.0;
 uint64_t ArgMaxStartTime = 0;
 uint64_t ArgMaxEndTime = 0;
 double ArgMaxExecutionTime = 0.0;
+
+std::string ProtocolOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/protocol_output.csv";
+std::vector<std::string> ProtocolHeaders = {"index", "nn_name", "timestamp_power_reading", "avg_power_usage_mcW", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
+WriteToCSV writeProtocolCSV(ProtocolOutputFile, ProtocolHeaders);
 
 //std::string layerType = "Conv";
 std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";

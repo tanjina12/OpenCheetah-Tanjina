@@ -178,6 +178,10 @@ extern string power_usage_path;
 double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName);
 
 /* for execution time/duration */
+extern uint64_t ProtocolStartTime;
+extern uint64_t ProtocolEndTime;
+extern uint64_t ProtocolExecutionTime;
+
 extern uint64_t ConvStartTime;
 extern uint64_t ConvEndTime;
 extern uint64_t ConvExecutionTime;
@@ -205,6 +209,10 @@ extern double AvgPoolExecutionTime;
 extern uint64_t ArgMaxStartTime;
 extern uint64_t ArgMaxEndTime;
 extern double ArgMaxExecutionTime;
+
+extern std::string ProtocolOutputFile;
+extern std::vector<std::string> ProtocolHeaders; 
+extern WriteToCSV writeProtocolCSV;
 
 //extern std::string layerType;
 extern std::string ConvOutputFile;

@@ -311,8 +311,6 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
                    signedIntType strideW, intType *inputArr, intType *filterArr,
                    intType *outArr) {                
 #ifdef LOG_LAYERWISE
-  // sleep(1); // Added by Tanjina to adjust the first power reading timestamp
-  std::this_thread::sleep_for(std::chrono::seconds(3)); // Added by Tanjina  // Sleep for 3 seconds at the beginning of Conv layer before collecting power readings
   INIT_ALL_IO_DATA_SENT;
   INIT_TIMER;
 
@@ -324,19 +322,19 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   ConvStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
 #endif
 
-/** 
-  * Code block for power measurement in Conv layer starts
-  * Added by - Tanjina
-**/
-#ifdef LOG_LAYERWISE
-  // conv layer counter
-  Conv_layer_count++;
+// /** 
+//   * Code block for power measurement in Conv layer starts
+//   * Added by - Tanjina
+// **/
+// #ifdef LOG_LAYERWISE
+//   // conv layer counter
+//   Conv_layer_count++;
 
-  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
-  // Pass the the Power usage file path to the Energy measurement library 
-  EnergyMeasurement measurement(power_usage_path);
+//   std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+//   // Pass the the Power usage file path to the Energy measurement library 
+//   EnergyMeasurement measurement(power_usage_path);
 
-#endif
+// #endif
 
   static int ctr = 1;
   std::cout << "Conv2DCSF " << ctr << " called N=" << N << ", H=" << H
@@ -516,53 +514,53 @@ void Conv2DWrapper(signedIntType N, signedIntType H, signedIntType W,
   ConvEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
 # endif
   
-/** 
- * Code block for power measurement in Conv layer ends
- * Added by - Tanjina
-**/  
-#ifdef LOG_LAYERWISE
-  std::cout << "STOPPING ENERGY MEASUREMENT" << std::endl;
-  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
-  // ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
-  ConvExecutionTime = (ConvEndTime - ConvStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+// /** 
+//  * Code block for power measurement in Conv layer ends
+//  * Added by - Tanjina
+// **/  
+// #ifdef LOG_LAYERWISE
+//   std::cout << "STOPPING ENERGY MEASUREMENT" << std::endl;
+//   std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+//   // ConvExecutionTime = (ConvEndTime - ConvStartTime) / 1000.0; // Added by Tanjina to calculate the duration/execution time (Convert from milliseconds to seconds)
+//   ConvExecutionTime = (ConvEndTime - ConvStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
  
-  for(int i = 0; i < power_readings.size(); ++i){
-    uint64_t avgPower = power_readings[i].first; // Note-Tanjina: Keep in microwatts, need to do the conversion later
-    int64_t timestampPower = power_readings[i].second;
-    // double avgPowerUsage = avgPower / 1000000.0;
+//   for(int i = 0; i < power_readings.size(); ++i){
+//     uint64_t avgPower = power_readings[i].first; // Note-Tanjina: Keep in microwatts, need to do the conversion later
+//     int64_t timestampPower = power_readings[i].second;
+//     // double avgPowerUsage = avgPower / 1000000.0;
 
-    ConvTotalPowerConsumption += avgPower;
-    std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << avgPower << " microwatts " << "Timestamp of the current power reading: " << timestampPower << " Conv layer start Timestamp: " << ConvStartTime << " Conv layer end Timestamp: " << ConvEndTime <<  " Execution time: " << ConvExecutionTime << " milliseconds" << std::endl;
-    // std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
+//     ConvTotalPowerConsumption += avgPower;
+//     std::cout << "Tanjina-Power usage values from the power_reading for HomConv #" << Conv_layer_count << " : " << avgPower << " microwatts " << "Timestamp of the current power reading: " << timestampPower << " Conv layer start Timestamp: " << ConvStartTime << " Conv layer end Timestamp: " << ConvEndTime <<  " Execution time: " << ConvExecutionTime << " milliseconds" << std::endl;
+//     // std::cout <<  "Tanjina-NN architecture info: " << "Conv_N = " << N << " Conv_H = " << H << " Conv_W = " << W << " Conv_CI = " << CI << " Conv_FH = " << FH << " Conv_FW = " << FW << " Conv_CO = " << CO << " Conv_ zPadHLeft = " << zPadHLeft << " Conv_zPadHRight = " << zPadHRight << " Conv_zPadWLeft = " << zPadWLeft  << " Conv_zPadWRight = " << zPadWRight << " Conv_strideH = " << strideH << " Conv_strideW = " << strideW << std::endl;
     
-    std::vector<csv_column_type> conv_data;
-    conv_data.push_back(i);
-    conv_data.push_back("Conv");
-    conv_data.push_back(Conv_layer_count);
-    conv_data.push_back(timestampPower);
-    conv_data.push_back(avgPower);
-    conv_data.push_back(ConvStartTime);
-    conv_data.push_back(ConvEndTime);
-    conv_data.push_back(ConvExecutionTime);
-    conv_data.push_back(N);
-    conv_data.push_back(H);
-    conv_data.push_back(W);
-    conv_data.push_back(CI);
-    conv_data.push_back(FH);
-    conv_data.push_back(FW);
-    conv_data.push_back(CO);
-    conv_data.push_back(zPadHLeft);
-    conv_data.push_back(zPadHRight);
-    conv_data.push_back(zPadWLeft);
-    conv_data.push_back(zPadWRight);
-    conv_data.push_back(strideH);
-    conv_data.push_back(strideW);
+//     std::vector<csv_column_type> conv_data;
+//     conv_data.push_back(i);
+//     conv_data.push_back("Conv");
+//     conv_data.push_back(Conv_layer_count);
+//     conv_data.push_back(timestampPower);
+//     conv_data.push_back(avgPower);
+//     conv_data.push_back(ConvStartTime);
+//     conv_data.push_back(ConvEndTime);
+//     conv_data.push_back(ConvExecutionTime);
+//     conv_data.push_back(N);
+//     conv_data.push_back(H);
+//     conv_data.push_back(W);
+//     conv_data.push_back(CI);
+//     conv_data.push_back(FH);
+//     conv_data.push_back(FW);
+//     conv_data.push_back(CO);
+//     conv_data.push_back(zPadHLeft);
+//     conv_data.push_back(zPadHRight);
+//     conv_data.push_back(zPadWLeft);
+//     conv_data.push_back(zPadWRight);
+//     conv_data.push_back(strideH);
+//     conv_data.push_back(strideW);
 
-    writeConvCSV.insertDataRow(conv_data);
-  }
-  // Added by Tanjina
-  std::this_thread::sleep_for(std::chrono::seconds(3)); //  Sleep for 3 seconds at the end of Conv layer after collecting power readings 
-#endif
+//     writeConvCSV.insertDataRow(conv_data);
+//   }
+//   // Added by Tanjina
+//   std::this_thread::sleep_for(std::chrono::seconds(3)); //  Sleep for 3 seconds at the end of Conv layer after collecting power readings 
+// #endif
 
 }
 

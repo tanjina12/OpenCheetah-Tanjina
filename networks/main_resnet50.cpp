@@ -7,6 +7,10 @@
 #include <chrono>
 
 #include "library_fixed.h"
+#include "globals.h"
+#include "energy_consumption.hpp"
+#include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
+
 using namespace std;
 #define USE_FUSED_BN 1
 
@@ -1819,7 +1823,20 @@ int main(int argc, char **argv) {
   auto cur_start = CURRENT_TIME;
   std::cout << "Current time of start protocol = " << cur_start
             << std::endl;
+  ProtocolStartTime = cur_start; // Added by Tanjina to calculate the duration/execution time
   std::cout << "*******************" << std::endl;
+#endif
+
+/** 
+  * Code block for power measurement when Protocol starts
+  * Added by - Tanjina
+**/
+#ifdef LOG_LAYERWISE
+
+  std::cout << "STARTING ENERGY MEASUREMENT" << std::endl;
+  // Pass the the Power usage file path to the Energy measurement library 
+  EnergyMeasurement measurement(power_usage_path);
+
 #endif
 
   uint64_t *tmp0 = make_array<uint64_t>(1, 224, 224, 3);
@@ -6392,11 +6409,40 @@ int main(int argc, char **argv) {
 
   // Add by Eloise
   std::cout << "*******************" << std::endl;
-  cur_start = CURRENT_TIME;
-  std::cout << "Current time of end protocol = " << cur_start
+  auto cur_end = CURRENT_TIME;
+  std::cout << "Current time of end protocol = " << cur_end
             << std::endl;
+  ProtocolEndTime = cur_end; // Added by Tanjina to calculate the duration/execution time
   std::cout << "*******************" << std::endl;
 
+  /** 
+ * Code block for power measurement when Protocol ends
+ * Added by - Tanjina
+**/  
+#ifdef LOG_LAYERWISE
+  std::cout << "STOPPING ENERGY MEASUREMENT" << std::endl;
+  std::vector<std::pair<uint64_t, int64_t>> power_readings = measurement.stop();
+  
+  ProtocolExecutionTime = (ProtocolEndTime - ProtocolStartTime); // Note-Tanjina: Keep in milliseconds, need to do the conversion later
+ 
+  for(int i = 0; i < power_readings.size(); ++i){
+    uint64_t avgPower = power_readings[i].first; // Note-Tanjina: Keep in microwatts, need to do the conversion later
+    int64_t timestampPower = power_readings[i].second;
+
+    std::cout << "SNNI Protcol Average Power: " << avgPower << " microwatts " << "Timestamp of the current power reading: " << timestampPower << " Protocol start Timestamp: " << ProtocolStartTime << " Protocol end Timestamp: " << ProtocolEndTime <<  " Protocol Execution time: " << ProtocolExecutionTime << " milliseconds" << std::endl;
+    
+    std::vector<csv_column_type> protocol_output;
+    protocol_output.push_back(i);
+    protocol_output.push_back("ResNet50");
+    protocol_output.push_back(timestampPower);
+    protocol_output.push_back(avgPower);
+    protocol_output.push_back(ProtocolStartTime);
+    protocol_output.push_back(ProtocolEndTime);
+    protocol_output.push_back(ProtocolExecutionTime);
+
+    writeProtocolCSV.insertDataRow(protocol_output);
+  }
+#endif
 
   EndComputation();
 
