@@ -26,8 +26,8 @@ SOFTWARE.
 #include "functionalities_uniform.h"
 #include "library_fixed_common.h"
 
-#include "energy_consumption.hpp"
-#include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
+// #include "energy_consumption.hpp"
+// #include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
 
 #define LOG_LAYERWISE
 #define VERIFY_LAYERWISE

@@ -215,9 +215,9 @@ extern std::vector<std::string> ProtocolHeaders;
 extern WriteToCSV writeProtocolCSV;
 
 //extern std::string layerType;
-extern std::string ConvOutputFile;
-extern std::vector<std::string> ConvHeaders; 
-extern WriteToCSV writeConvCSV;
+// extern std::string ConvOutputFile;
+// extern std::vector<std::string> ConvHeaders; 
+// extern WriteToCSV writeConvCSV;
 
 // extern std::string ReluOutputFile;
 // extern std::vector<std::string> ReluHeaders; 

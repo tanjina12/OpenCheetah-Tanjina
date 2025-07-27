@@ -187,13 +187,13 @@ uint64_t ArgMaxEndTime = 0;
 double ArgMaxExecutionTime = 0.0;
 
 std::string ProtocolOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/protocol_output.csv";
-std::vector<std::string> ProtocolHeaders = {"index", "nn_name", "timestamp_power_reading", "avg_power_usage_mcW", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
+std::vector<std::string> ProtocolHeaders = {"index", "nn_name", "timestamp_power_reading", "avg_power_usage_mcW", "protocol_start_timestamp", "protocol_end_timestamp", "protocol_execution_time_ms"};
 WriteToCSV writeProtocolCSV(ProtocolOutputFile, ProtocolHeaders);
 
 //std::string layerType = "Conv";
-std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";
-std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage_mcW", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
-WriteToCSV writeConvCSV(ConvOutputFile, ConvHeaders);
+// std::string ConvOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/conv_output.csv";
+// std::vector<std::string> ConvHeaders = {"index", "layer_name", "layer_number", "timestamp_power_reading", "avg_power_usage_mcW", "conv_start_timestamp", "conv_end_timestamp", "execution_time_ms", "conv_N", "conv_H", "conv_W", "conv_CI", "conv_FH", "conv_FW", "conv_CO", "conv_ zPadHLeft", "conv_zPadHRight", "conv_zPadWLeft", "conv_zPadWRight", "conv_strideH", "conv_strideW"};
+// WriteToCSV writeConvCSV(ConvOutputFile, ConvHeaders);
 
 //std::string layerType = "Relu";
 // std::string ReluOutputFile = "/home/tanjina/OpenCheetah-Tanjina/Output/relu_output.csv";

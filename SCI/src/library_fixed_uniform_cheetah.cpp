@@ -7,8 +7,8 @@
 #include "cheetah/cheetah-api.h"
 #include "defines_uniform.h"
 #include "globals.h"
-#include "energy_consumption.hpp"
-#include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
+// #include "energy_consumption.hpp"
+// #include "csv_writer.hpp" // Added by Tanjina for writing the measurement values into a csv file
 
 #define VERIFY_LAYERWISE
 #define LOG _LAYERWISE
