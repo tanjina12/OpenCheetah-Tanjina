@@ -138,8 +138,8 @@ int AvgPool_layer_count = 0;
 int ArgMax_layer_count = 0;
 
 // Path to the power usage
-// string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; 
-string power_usage_path = "/sys/class/hwmon/hwmon4/device/power1_average"; 
+// string power_usage_path = "/sys/class/hwmon/hwmon3/device/power1_average"; //[on NEW Client machine]
+string power_usage_path = "/sys/class/hwmon/hwmon4/device/power1_average"; // [on Old Client, & on Server machines]
 
 // Added by Tanjina
 double computeAveragePower(uint64_t totalPower, int layerCount, const std::string& layerName){
